@@ -16,11 +16,11 @@ function init() {
 	var codeTypes = [];
 
 	// Initializing dimensions of spawn and drop space.
-	var topSpawn = 1200;
-	var topDrop = 600;
+	var topSpawn = $('demoCanvas').height;
+	var topDrop = $('demoCanvas').height/2;
 	var bottomDrop = 0;
-	var leftSide = 800;
-	var rightSide = 1600;
+	var leftSide = $('demoCanvas').width/2;
+	var rightSide = $('demoCanvas').width;
 
 	var xPointList = [topDrop];
 	var yPointList = [leftSide];
@@ -30,12 +30,11 @@ function init() {
 	var createRepeatBlock = function() {
 		codeComponents.push(new createjs.Shape());
 		var last = codeComponents.length-1
-		codeComponents[last].graphics.beginFill("DeepSkyBlue").drawRect(0,0,200,20);
-		codeComponents[last].x = 10;
-		codeComponents[last].y = 100;
+		codeComponents[last].graphics.beginFill("DeepSkyBlue").drawRect(0,0,200,40);
+		codeComponents[last].x = leftSide-100;
+		codeComponents[last].y = topSpawn;
 		stage.addChild(codeComponents[last]);
 		stage.update();
-		//codeComponents.push(repeatBlock);
 		codeTypes.push("repeatBlock");
 		console.log(codeComponents);
 		console.log(codeTypes);
@@ -52,30 +51,40 @@ function init() {
 			return false;
 		}
 	}
-
-	codeComponents[0].on("pressmove", function(evt) {
+	
+	var pleaseMove = function(which, evt) {
 		console.log("moving");
 	    evt.target.x = evt.stageX;
 	    evt.target.y = evt.stageY;
-	    snapTo(0);
+	    snapTo(which);
 	    stage.update();
-	});
+	}
 
-	codeComponents[0].on("pressup", function(evt) { 
+
+	var pleaseDrop = function(which, evt) {
 		console.log("up"); 
-		snapTo(0);
-		// If out of bounds, delete object
+		snapTo(which);
+		// If out of bounds, snap object back to beginning position
+		// HANDLE CASE IF DRAGGING OUT OF DROP THING
 		if (outOfBounds() == true) {
-			//stage.removeChild(codeComponents[index])
-			//codeTypes.splice(0, 1);
-			//createRepeatBlock();
+			codeComponents[which].x = leftSide;
+			codeComponents[which].y = topSpawn;
 		}
 		// If there is a close neighbour, snap to it. <<WE ARE BRITISH, NEIGHBOUR HAS A U
 		else {
-		    codeComponents[0].x = neighbourX;
-		    codeComponents[0].y = neighbourY;
+		    codeComponents[which].x = neighbourX;
+		    codeComponents[which].y = neighbourY;
+		    createRepeatBlock();
 		}
 		stage.update();
+	};
+
+	codeComponents[0].on("pressmove", function(evt) {
+		pleaseMove(0, evt);
+	});
+
+	codeComponents[0].on("pressup", function(evt) { 
+		pleaseDrop(0, evt);
 	})
 
 	// Snaps block to anything that exists in the working space
