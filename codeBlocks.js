@@ -1,6 +1,6 @@
 function init() {
 
-	// Mouse down checker nonfunctional. It doesn't make any logical sense either.
+	// Mouse down checker unnecessary
 	var mouseDown = 0;
 	document.body.onmousedown = function() { 
 	    mouseDown = 1;
@@ -24,6 +24,8 @@ function init() {
 
 	var xPointList = [topDrop];
 	var yPointList = [leftSide];
+	var neighbourX;
+	var neighbourY;
 
 	var createRepeatBlock = function() {
 		codeComponents.push(new createjs.Shape());
@@ -43,7 +45,7 @@ function init() {
 
 	// Checks if the mouse (and therefore your component) is out of the working space.
 	var outOfBounds = function() {
-		if(MouseEvent.stageX < 200 && MouseEvent.stageY > 200) {
+		if(MouseEvent.stageX < leftSide && MouseEvent.stageY > topDrop) {
 			return true;
 		}
 		else {
@@ -52,11 +54,29 @@ function init() {
 	}
 
 	codeComponents[0].on("pressmove", function(evt) {
+		console.log("moving");
 	    evt.target.x = evt.stageX;
 	    evt.target.y = evt.stageY;
+	    snapTo(0);
 	    stage.update();
 	});
-	codeComponents[0].on("pressup", function(evt) { console.log("up"); })
+
+	codeComponents[0].on("pressup", function(evt) { 
+		console.log("up"); 
+		snapTo(0);
+		// If out of bounds, delete object
+		if (outOfBounds() == true) {
+			//stage.removeChild(codeComponents[index])
+			//codeTypes.splice(0, 1);
+			//createRepeatBlock();
+		}
+		// If there is a close neighbour, snap to it. <<WE ARE BRITISH, NEIGHBOUR HAS A U
+		else {
+		    codeComponents[0].x = neighbourX;
+		    codeComponents[0].y = neighbourY;
+		}
+		stage.update();
+	})
 
 	// Snaps block to anything that exists in the working space
 	var snapTo = function(index) {
@@ -65,41 +85,20 @@ function init() {
 		// console.log(block);
 		// var originalX = block.x;
 		// var originalY = block.y;
-		while(mouseDown === 1) {
-			for(var num = 0; num < xPointList.length; num++) {
-				// Determine the distance from the mouse position to the point
-				var diffX = Math.abs(MouseEvent.stageX - xPointList[num]);
-				var diffY = Math.abs(MouseEvent.stageY - yPointList[num]); 
-				var d = Math.sqrt(diffX*diffX + diffY*diffY);        
+		for(var num = 0; num < xPointList.length; num++) {
+			// Determine the distance from the mouse position to the point
+			var diffX = Math.abs(MouseEvent.stageX - xPointList[num]);
+			var diffY = Math.abs(MouseEvent.stageY - yPointList[num]); 
+			var d = Math.sqrt(diffX*diffX + diffY*diffY);        
 
-				// If the current point is closeEnough and the closest (so far)
-				// Then choose it to snap to.
-				var snapDistance = 100;
-				var neighbour;
-				var closest = (d<snapDistance && (dist == null || d < dist));
-				if (closest) {
-				     neighbour = block;
-				}          
-			}
-		}
-
-		// If there is a close neighbour, snap to it. <<WE ARE BRITISH, NEIGHBOUR HAS A U
-		if (neighbour) {
-		    codeComponents[index].x = neighbour.x;
-		    codeComponents[index].y = neighbour.y;
-		}
-		// If out of bounds, delete object
-		else if (outOfBounds() == true) {
-			stage.removeChild(codeComponents[index])
-			codeTypes.splice(index, 1);
-			createRepeatBlock();
-		}
-		// Otherwise snap to wherever it is at the moment
-		else {
-		    codeComponents[index].x = MouseEvent.stageX;
-	    	codeComponents[index].y = MouseEvent.stageY;
+			// If the current point is closeEnough and the closest (so far)
+			// Then choose it to snap to.
+			var snapDistance = 100;
+			var closest = (d<snapDistance && (dist == null || d < dist));
+			if (closest) {
+				neighbourX = xPointList[num];
+				neighbourY = yPointList[num];
+			}          
 		}
 	};
-
-	//snapTo(0);
 }
