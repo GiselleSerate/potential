@@ -79,9 +79,14 @@ function init() {
 		stage.update();
 	};
 
-	codeComponents[0].on("pressmove", function(evt) {
-		pleaseMove(0, evt);
-	});
+
+	for(var i=0;i< codeComponents.length; i++) {
+	       codeComponents[i].addEventListener("pressmove", pleaseMove(i));
+	}
+
+	// codeComponents[0].on("pressmove", function(evt) {
+	// 	pleaseMove(0, evt);
+	// });
 
 	codeComponents[0].on("pressup", function(evt) { 
 		pleaseDrop(0, evt);
