@@ -5,10 +5,12 @@
 	<link href='http://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="styles.css">
 	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="https://code.createjs.com/easeljs-0.8.1.min.js"></script>
 	<script src="introPage.js"></script>
+	<script src="codeBlocks.js"></script>
 </head>
-<body>
-<div id="startButton"></div>
-
+<body onload="init();">
+	<div id="startButton"></div>
+	<canvas id="demoCanvas" width="500" height="300"></canvas>
 </body>
 </html>
