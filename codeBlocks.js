@@ -1,4 +1,14 @@
 function init() {
+
+	// Mouse down checker nonfunctional. It doesn't make any logical sense either.
+	var mouseDown = 0;
+	document.body.onmousedown = function() { 
+	    mouseDown = 1;
+	}
+	document.body.onmouseup = function() {
+	    mouseDown = 0;
+	}
+
 	// var canvas = document.getElementById("demoCanvas");
 	var stage = new createjs.Stage("demoCanvas");
 
@@ -16,15 +26,17 @@ function init() {
 	var yPointList = [leftSide];
 
 	var createRepeatBlock = function() {
-		var repeatBlock = new createjs.Shape();
-		repeatBlock.graphics.beginFill("DeepSkyBlue").drawRect(0,0,200,20);
-		repeatBlock.x = 10;
-		repeatBlock.y = 100;
-		stage.addChild(repeatBlock);
+		codeComponents.push(new createjs.Shape());
+		var last = codeComponents.length-1
+		codeComponents[last].graphics.beginFill("DeepSkyBlue").drawRect(0,0,200,20);
+		codeComponents[last].x = 10;
+		codeComponents[last].y = 100;
+		stage.addChild(codeComponents[last]);
 		stage.update();
-		codeComponents.push(repeatBlock);
+		//codeComponents.push(repeatBlock);
 		codeTypes.push("repeatBlock");
-		//console.log(codeComponents);
+		console.log(codeComponents);
+		console.log(codeTypes);
 	}
 
 	createRepeatBlock();
@@ -38,6 +50,13 @@ function init() {
 			return false;
 		}
 	}
+
+	codeComponents[0].on("pressmove", function(evt) {
+	    evt.target.x = evt.stageX;
+	    evt.target.y = evt.stageY;
+	    stage.update();
+	});
+	codeComponents[0].on("pressup", function(evt) { console.log("up"); })
 
 	// Snaps block to anything that exists in the working space
 	var snapTo = function(index) {
@@ -82,15 +101,5 @@ function init() {
 		}
 	};
 
-	snapTo(0);
+	//snapTo(0);
 }
-
-// Mouse down checker nonfunctional. It doesn't make any logical sense either.
-var mouseDown = 1;
-// 0;
-// document.body.onmousedown = function() { 
-//     mouseDown = 1;
-// }
-// document.body.onmouseup = function() {
-//     mouseDown = 0;
-// }
