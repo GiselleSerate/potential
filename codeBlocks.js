@@ -1,14 +1,4 @@
 function init() {
-
-	// Mouse down checker unnecessary
-	var mouseDown = 0;
-	document.body.onmousedown = function() { 
-	    mouseDown = 1;
-	}
-	document.body.onmouseup = function() {
-	    mouseDown = 0;
-	}
-
 	var whichTime = 0;
 
 	var stage = new createjs.Stage("demoCanvas");
@@ -54,8 +44,6 @@ function init() {
 		var newRep = new createjs.Shape(repeatSet)
 		newRep.x = 0;
 		newRep.y = 0;
-		//newRep.x = leftSide;
-		//newRep.y = topSpawn;
 		//Creates label.
 		var label = new createjs.Text("repeat", "#000000");
 		label.textAlign = "center";
@@ -76,12 +64,22 @@ function init() {
 
 	var createAttackBlock = function() {
 		var attackSet = new createjs.Graphics().beginFill("purple").drawRect(0, 0, 200, 40);
-		var newAtt = new createjs.Shape(attackSet);
-		newAtt.x = leftSide+240;
-		newAtt.y = topSpawn;
-		var part = new CodePiece(newAtt, "attack");
+		var newAtt = new createjs.Shape(attackSet);		
+		newAtt.x = 0;
+		newAtt.y = 0;
+		//Creates label.
+		var label = new createjs.Text("attack", "#000000");
+		label.textAlign = "center";
+		label.x = 100;
+		label.y = 10;
+		//Creates dragger.
+		var dragMe = new createjs.Container();
+		dragMe.x = leftSide+240;
+		dragMe.y = topSpawn;
+		dragMe.addChild(newAtt, label);
+		var part = new CodePiece(dragMe, "attack");
 		codeList.push(part);
-		stage.addChild(newAtt);
+		stage.addChild(dragMe);
 		stage.update();
 	};
 
@@ -153,7 +151,7 @@ function init() {
 
 			// If the current point is closeEnough and the closest (so far)
 			// Then choose it to snap to.
-			var snapDistance = 100;
+			var snapDistance = 10;
 			var closest = (d<snapDistance && (dist == null || d < dist));
 			if (closest) {
 				neighbourX = pointList[num].x;
