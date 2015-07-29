@@ -43,7 +43,7 @@ function init() {
 	var neighbourY;
 
 	var dropSite = new createjs.Shape();
-	dropSite.graphics.beginFill("red").drawRect(0,0,200,40);
+	dropSite.graphics.beginFill("gray").drawRect(0,0,200,40);
 	dropSite.x = leftSide;
 	dropSite.y = topDrop + 40;
 	stage.addChild(dropSite);
@@ -52,13 +52,25 @@ function init() {
 	var createRepeatBlock = function() {
 		var repeatSet = new createjs.Graphics().beginFill("DeepSkyBlue").drawRect(0, 0, 200, 40);
 		var newRep = new createjs.Shape(repeatSet)
-		newRep.x = leftSide;
-		newRep.y = topSpawn;
-		var part = new CodePiece(newRep, "repeat");
+		newRep.x = 0;
+		newRep.y = 0;
+		//newRep.x = leftSide;
+		//newRep.y = topSpawn;
+		//Creates label.
+		var label = new createjs.Text("repeat", "#000000");
+		label.textAlign = "center";
+		label.x = 100;
+		label.y = 10;
+		//Creates dragger.
+		var dragMe = new createjs.Container();
+		dragMe.x = leftSide;
+		dragMe.y = topSpawn;
+		dragMe.addChild(newRep, label);
+		var part = new CodePiece(dragMe, "repeat");
 		codeList.push(part);
-		stage.addChild(newRep);
+		stage.addChild(dragMe);
 		stage.update();
-	}
+	};
 
 	createRepeatBlock();
 
@@ -71,7 +83,7 @@ function init() {
 		codeList.push(part);
 		stage.addChild(newAtt);
 		stage.update();
-	}
+	};
 
 	createAttackBlock();
 
@@ -87,8 +99,8 @@ function init() {
 	
 	var pleaseMove = function(which, evt) {
 		console.log("moving");
-	    evt.target.x = evt.stageX;
-	    evt.target.y = evt.stageY;
+	    evt.currentTarget.x = evt.stageX;
+	    evt.currentTarget.y = evt.stageY;
 	    snapTo(which);
 	    stage.update();
 	}
@@ -98,8 +110,8 @@ function init() {
 		console.log("up"); 
 		snapTo(which);
 		//Snap object to neighbourX and neighbourY
-		evt.target.x = neighbourX;
-		evt.target.y = neighbourY+40;
+		evt.currentTarget.x = neighbourX;
+		evt.currentTarget.y = neighbourY+40;
 		// If neighbour has been reset and is not its initial value, snap to that and create a new repeat block in the old place. 
 		if(neighbourX !== pointList[0].x && neighbourY !== pointList[0].y) {
 			if(evt.target.type === "repeat") {
