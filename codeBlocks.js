@@ -54,7 +54,8 @@ function init() {
 		var newRep = new createjs.Shape(repeatSet)
 		newRep.x = leftSide;
 		newRep.y = topSpawn;
-		codeList.push(newRep, "repeat");
+		var part = new CodePiece(newRep, "repeat");
+		codeList.push(part);
 		stage.addChild(newRep);
 		stage.update();
 	}
@@ -91,7 +92,7 @@ function init() {
 		evt.target.x = neighbourX;
 		evt.target.y = neighbourY;
 		// If neighbour has been reset and is not its initial value, snap to that and create a new repeat block in the old place. 
-		if(neighbourX !== xPointList[0] && neighbourY !== yPointList[0]) {
+		if(neighbourX !== pointList[0].x && neighbourY !== pointList[0].y) {
 			if(evt.target.type === "repeat") {
 		    	createRepeatBlock();
 			}
@@ -106,12 +107,16 @@ function init() {
 
 	for(var i=0;i< codeList.length; i++) {
 		//Calls pleaseMove function when mouse is clicked.
-	    codeList[i]["piece"].on("pressmove", function(evt) {
+		console.log(codeList[i]);
+		var floor = codeList[i].piece
+		console.log("floor")
+		console.log(floor);
+	    codeList[i].piece.on("pressmove", function(evt) {
 			pleaseMove(i, evt);
 		});
 
 	    //Calls pleaseDrop function when mouse is no longer clicked.
-		codeList[i]["piece"].on("pressup", function(evt) { 
+		codeList[i].piece.on("pressup", function(evt) { 
 			pleaseDrop(i, evt);
 			whichTime = 0;
 		})
@@ -119,12 +124,7 @@ function init() {
 
 	// Snaps block to anything that exists in the working space
 	var snapTo = function(index) {
-		var block = codeList[index]["piece"];
-
-		// console.log(block);
-		// var originalX = block.x;
-		// var originalY = block.y;
-		for(var num = 0; num < xPointList.length; num++) {
+		for(var num = 0; num < pointList.length; num++) {
 			// Determine the distance from the mouse position to the point
 			var diffX = Math.abs(MouseEvent.stageX - pointList[num].x);
 			var diffY = Math.abs(MouseEvent.stageY - pointList[num].y); 
