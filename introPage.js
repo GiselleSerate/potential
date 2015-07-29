@@ -1,12 +1,12 @@
 $(document).ready(function () {
-
-    $("#startButton").append('<img src = "StartButton.png" onclick="nextPage()">');
+	 $("#startButton").append('<img src = "StartButton.png" onclick="nextPage()">');
      $("#Logo").append('<p id= "title"> Potential</p><p id= "subtitle"> An interactive story adventure!</p>');
 });
 
 
 
 var nextPage = function(){
-	console.log("hi")
-
+	document.getElementById("Logo").style.visibility = "hidden";
+	document.getElementById("startButton").style.visibility = "hidden";
+	document.getElementById("background1").style.visibility = "hidden";
 }
