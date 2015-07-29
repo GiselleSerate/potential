@@ -50,16 +50,20 @@ function init() {
 	stage.update();
 
 	var createRepeatBlock = function() {
-		codeList.push(new createjs.Shape(), "repeat");
-		var last = 0;
-		codeList[last].piece.graphics.beginFill("DeepSkyBlue").drawRect(0,40,200,40);
-		codeList[last].piece.x = leftSide;
-		codeList[last].piece.y = topSpawn;
-		stage.addChild(codeList[last].piece);
+		var repeatSet = new createjs.Graphics().beginFill("DeepSkyBlue").drawRect(0, 0, 100, 100);
+		var newRep = new createjs.Shape(repeatSet)
+		newRep.x = leftSide;
+		newRep.y = topSpawn;
+		codeList.push(newRep, "repeat");
+		stage.addChild(newRep);
 		stage.update();
 	}
 
 	createRepeatBlock();
+
+	var createAttackBlock = function() {
+		//CEREATE ATTACK BLOCK HERE LALALKEROASKDFLKJNBKLFMMADFLKM
+	}
 
 	// Checks if the mouse (and therefore your component) is out of the working space.
 	var outOfBounds = function() {
@@ -88,7 +92,12 @@ function init() {
 		evt.target.y = neighbourY;
 		// If neighbour has been reset and is not its initial value, snap to that and create a new repeat block in the old place. 
 		if(neighbourX !== xPointList[0] && neighbourY !== yPointList[0]) {
-		    createRepeatBlock();
+			if(evt.target.type === "repeat") {
+		    	createRepeatBlock();
+			}
+			else if(evt.target.type === "attack") {
+				createAttackBlock();
+			}
 		}
 		stage.update();
 		whichTime += 1;
@@ -97,12 +106,12 @@ function init() {
 
 	for(var i=0;i< codeList.length; i++) {
 		//Calls pleaseMove function when mouse is clicked.
-	    codeList[i].piece.on("pressmove", function(evt) {
+	    codeList[i]["piece"].on("pressmove", function(evt) {
 			pleaseMove(i, evt);
 		});
 
 	    //Calls pleaseDrop function when mouse is no longer clicked.
-		codeList[i].piece.on("pressup", function(evt) { 
+		codeList[i]["piece"].on("pressup", function(evt) { 
 			pleaseDrop(i, evt);
 			whichTime = 0;
 		})
@@ -110,7 +119,7 @@ function init() {
 
 	// Snaps block to anything that exists in the working space
 	var snapTo = function(index) {
-		var block = codeList[index].piece;
+		var block = codeList[index]["piece"];
 
 		// console.log(block);
 		// var originalX = block.x;
