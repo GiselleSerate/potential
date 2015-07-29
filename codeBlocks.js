@@ -50,7 +50,7 @@ function init() {
 	stage.update();
 
 	var createRepeatBlock = function() {
-		var repeatSet = new createjs.Graphics().beginFill("DeepSkyBlue").drawRect(0, 0, 100, 100);
+		var repeatSet = new createjs.Graphics().beginFill("DeepSkyBlue").drawRect(0, 0, 200, 40);
 		var newRep = new createjs.Shape(repeatSet)
 		newRep.x = leftSide;
 		newRep.y = topSpawn;
@@ -63,8 +63,17 @@ function init() {
 	createRepeatBlock();
 
 	var createAttackBlock = function() {
-		//CEREATE ATTACK BLOCK HERE LALALKEROASKDFLKJNBKLFMMADFLKM
+		var attackSet = new createjs.Graphics().beginFill("purple").drawRect(0, 0, 200, 40);
+		var newAtt = new createjs.Shape(attackSet);
+		newAtt.x = leftSide+240;
+		newAtt.y = topSpawn;
+		var part = new CodePiece(newAtt, "attack");
+		codeList.push(part);
+		stage.addChild(newAtt);
+		stage.update();
 	}
+
+	createAttackBlock();
 
 	// Checks if the mouse (and therefore your component) is out of the working space.
 	var outOfBounds = function() {
@@ -90,7 +99,7 @@ function init() {
 		snapTo(which);
 		//Snap object to neighbourX and neighbourY
 		evt.target.x = neighbourX;
-		evt.target.y = neighbourY;
+		evt.target.y = neighbourY+40;
 		// If neighbour has been reset and is not its initial value, snap to that and create a new repeat block in the old place. 
 		if(neighbourX !== pointList[0].x && neighbourY !== pointList[0].y) {
 			if(evt.target.type === "repeat") {
