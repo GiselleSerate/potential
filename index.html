@@ -2,13 +2,22 @@
 <html>
 <head>
 	<title>Our Video Game</title>
+	<!--Importing font from Google-->
 	<link href='http://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="styles.css">
+	<!--Importing JQuery-->
 	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<!--Importing EaselJS-->
+	<script src="https://code.createjs.com/easeljs-0.8.1.min.js"></script>
+	<!--Importing Sarah's Javascript: first page-->
 	<script src="introPage.js"></script>
+	<!--Importing Giselle's Javascript: drag and drop, lock, and process functionality-->
+	<!--NOT YET WORKING AT ALL AND MAY PRODUCE ERRORS. PLEASE COMMENT OUT THE NEXT LINE IF YOU NEED TO TEST YOUR OWN CODE.-->
+	<script src="codeBlocks.js"></script>
 </head>
-<body>
-<div id="startButton"></div>
-
+<body onload="init();">
+	<div id="Logo"></div>
+	<div id="startButton"></div>
+	<canvas id="demoCanvas" width="1600" height="1200"></canvas>
 </body>
 </html>
