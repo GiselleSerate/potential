@@ -9,38 +9,61 @@ function init() {
 	    mouseDown = 0;
 	}
 
-	// var canvas = document.getElementById("demoCanvas");
+	var whichTime = 0;
+
 	var stage = new createjs.Stage("demoCanvas");
 
-	var codeComponents = [];
-	var codeTypes = [];
+	//Constructor function for code pieces.
+	function CodePiece(piece, kind) {
+		this.piece = piece;
+		this.kind = kind;
+	}
+
+	//Creates array for storing components that are created.
+	var codeList = [];
 
 	// Initializing dimensions of spawn and drop space.
-	var topSpawn = $('demoCanvas').height;
-	var topDrop = $('demoCanvas').height/2;
-	var bottomDrop = 0;
-	var leftSide = $('demoCanvas').width/2;
-	var rightSide = $('demoCanvas').width;
+	var topSpawn = 0;
+	var topDrop = $('#demoCanvas').height()/2;
+	var bottomDrop = $('#demoCanvas').height();
+	var rightSide = $('#demoCanvas').width();
+	var leftSide = $('#demoCanvas').width()/2;
+	console.log(topSpawn + " " + topDrop + " " + bottomDrop + " " + leftSide + " " + rightSide); 
 
-	var xPointList = [topDrop];
-	var yPointList = [leftSide];
+	//Creates point constructor function. 
+	function Point(x, y) {
+		this.x = x;
+		this.y = y;
+	}
+
+	//Creates array for storing possible points to snap to. 
+	var pointList = [new Point(leftSide, topDrop)];
+
 	var neighbourX;
 	var neighbourY;
 
+	var dropSite = new createjs.Shape();
+	dropSite.graphics.beginFill("red").drawRect(0,0,200,40);
+	dropSite.x = leftSide;
+	dropSite.y = topDrop + 40;
+	stage.addChild(dropSite);
+	stage.update();
+
 	var createRepeatBlock = function() {
-		codeComponents.push(new createjs.Shape());
-		var last = codeComponents.length-1
-		codeComponents[last].graphics.beginFill("DeepSkyBlue").drawRect(0,0,200,40);
-		codeComponents[last].x = leftSide-100;
-		codeComponents[last].y = topSpawn;
-		stage.addChild(codeComponents[last]);
+		var repeatSet = new createjs.Graphics().beginFill("DeepSkyBlue").drawRect(0, 0, 100, 100);
+		var newRep = new createjs.Shape(repeatSet)
+		newRep.x = leftSide;
+		newRep.y = topSpawn;
+		codeList.push(newRep, "repeat");
+		stage.addChild(newRep);
 		stage.update();
-		codeTypes.push("repeatBlock");
-		console.log(codeComponents);
-		console.log(codeTypes);
 	}
 
 	createRepeatBlock();
+
+	var createAttackBlock = function() {
+		//CEREATE ATTACK BLOCK HERE LALALKEROASKDFLKJNBKLFMMADFLKM
+	}
 
 	// Checks if the mouse (and therefore your component) is out of the working space.
 	var outOfBounds = function() {
@@ -64,40 +87,47 @@ function init() {
 	var pleaseDrop = function(which, evt) {
 		console.log("up"); 
 		snapTo(which);
-		// If out of bounds, snap object back to beginning position
-		// HANDLE CASE IF DRAGGING OUT OF DROP THING
-		if (outOfBounds() == true) {
-			codeComponents[which].x = leftSide;
-			codeComponents[which].y = topSpawn;
-		}
-		// If there is a close neighbour, snap to it. <<WE ARE BRITISH, NEIGHBOUR HAS A U
-		else {
-		    codeComponents[which].x = neighbourX;
-		    codeComponents[which].y = neighbourY;
-		    createRepeatBlock();
+		//Snap object to neighbourX and neighbourY
+		evt.target.x = neighbourX;
+		evt.target.y = neighbourY;
+		// If neighbour has been reset and is not its initial value, snap to that and create a new repeat block in the old place. 
+		if(neighbourX !== xPointList[0] && neighbourY !== yPointList[0]) {
+			if(evt.target.type === "repeat") {
+		    	createRepeatBlock();
+			}
+			else if(evt.target.type === "attack") {
+				createAttackBlock();
+			}
 		}
 		stage.update();
+		whichTime += 1;
 	};
 
-	codeComponents[0].on("pressmove", function(evt) {
-		pleaseMove(0, evt);
-	});
 
-	codeComponents[0].on("pressup", function(evt) { 
-		pleaseDrop(0, evt);
-	})
+	for(var i=0;i< codeList.length; i++) {
+		//Calls pleaseMove function when mouse is clicked.
+	    codeList[i]["piece"].on("pressmove", function(evt) {
+			pleaseMove(i, evt);
+		});
+
+	    //Calls pleaseDrop function when mouse is no longer clicked.
+		codeList[i]["piece"].on("pressup", function(evt) { 
+			pleaseDrop(i, evt);
+			whichTime = 0;
+		})
+	}
 
 	// Snaps block to anything that exists in the working space
 	var snapTo = function(index) {
-		var block = codeComponents[index];
+		var block = codeList[index]["piece"];
 
 		// console.log(block);
 		// var originalX = block.x;
 		// var originalY = block.y;
 		for(var num = 0; num < xPointList.length; num++) {
 			// Determine the distance from the mouse position to the point
-			var diffX = Math.abs(MouseEvent.stageX - xPointList[num]);
-			var diffY = Math.abs(MouseEvent.stageY - yPointList[num]); 
+			var diffX = Math.abs(MouseEvent.stageX - pointList[num].x);
+			var diffY = Math.abs(MouseEvent.stageY - pointList[num].y); 
 			var d = Math.sqrt(diffX*diffX + diffY*diffY);        
 
 			// If the current point is closeEnough and the closest (so far)
@@ -105,9 +135,16 @@ function init() {
 			var snapDistance = 100;
 			var closest = (d<snapDistance && (dist == null || d < dist));
 			if (closest) {
-				neighbourX = xPointList[num];
-				neighbourY = yPointList[num];
+				neighbourX = pointList[num].x;
+				console.log(pointList[num].x);
+				neighbourY = pointList[num].y;
+			}
+			//Else if it's the first time through in a new drag sequence, set neighbourX and neighbourY to the block's initial coordinates.
+			else if (whichTime === 0) {
+				neighbourX = pointList[0].x;
+				neighbourY = pointList[0].y;
 			}          
+			//Else, leave neighbourX and neighbourY as whatever they were the last time you ran snapTo.
 		}
 	};
 }
