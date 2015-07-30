@@ -1,4 +1,12 @@
 function init() {
+	//Gets mouse position.
+	var cursorX;
+	var cursorY;
+	document.onmousemove = function(e){
+	    cursorX = e.pageX;
+	    cursorY = e.pageY;
+	}
+
 	var whichTime = 0;
 
 	var stage = new createjs.Stage("demoCanvas");
@@ -27,7 +35,7 @@ function init() {
 	}
 
 	//Creates array for storing possible points to snap to. 
-	var pointList = [new Point(leftSide, topDrop)];
+	var pointList = [new Point(leftSide, topSpawn-40), new Point(leftSide, topDrop-40)];
 
 	var neighbourX;
 	var neighbourY;
@@ -144,19 +152,25 @@ function init() {
 	// Snaps block to anything that exists in the working space
 	var snapTo = function(index) {
 		for(var num = 0; num < pointList.length; num++) {
+			//console.log("x " + pointList[num].x);
+			//console.log("mousex " + MouseEvent.stageX);
 			// Determine the distance from the mouse position to the point
-			var diffX = Math.abs(MouseEvent.stageX - pointList[num].x);
-			var diffY = Math.abs(MouseEvent.stageY - pointList[num].y); 
-			var d = Math.sqrt(diffX*diffX + diffY*diffY);        
+			var diffX = Math.abs(cursorX - pointList[num].x);
+			var diffY = Math.abs(cursorY - pointList[num].y); 
+			console.log(diffX + " " + diffY)
+			//var d = Math.sqrt(diffX*diffX + diffY*diffY);        
 
 			// If the current point is closeEnough and the closest (so far)
 			// Then choose it to snap to.
-			var snapDistance = 10;
-			var closest = (d<snapDistance && (dist == null || d < dist));
+			var xSnapDistance = 50;
+			var ySnapDistance = 50;
+			//var closest = (d<snapDistance && (dist == null || d < dist));
+			var closest = (diffX<xSnapDistance && diffY<ySnapDistance);
 			if (closest) {
 				neighbourX = pointList[num].x;
 				console.log(pointList[num].x);
 				neighbourY = pointList[num].y;
+				console.log("new closest");
 			}
 			//Else if it's the first time through in a new drag sequence, set neighbourX and neighbourY to the block's initial coordinates.
 			else if (whichTime === 0) {
