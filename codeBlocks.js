@@ -12,9 +12,10 @@ function init() {
 	var stage = new createjs.Stage("demoCanvas");
 
 	//Constructor function for code pieces.
-	function CodePiece(piece, kind) {
+	function CodePiece(piece, kind, locked) {
 		this.piece = piece;
 		this.kind = kind;
+		this.locked = locked;
 	}
 
 	//Creates array for storing components that are created.
@@ -82,7 +83,7 @@ function init() {
 		dragMe.x = leftSide;
 		dragMe.y = topSpawn;
 		dragMe.addChild(newRep, newExt, label);
-		var part = new CodePiece(dragMe, "repeat");
+		var part = new CodePiece(dragMe, "repeat", 0);
 		codeList.push(part);
 		stage.addChild(dragMe);
 		stage.update();
@@ -105,7 +106,7 @@ function init() {
 		dragMe.x = leftSide+240;
 		dragMe.y = topSpawn;
 		dragMe.addChild(newAtt, label);
-		var part = new CodePiece(dragMe, "attack");
+		var part = new CodePiece(dragMe, "attack", 0);
 		codeList.push(part);
 		stage.addChild(dragMe);
 		stage.update();
@@ -165,13 +166,16 @@ function init() {
 		if (whatKind === "repeat") {
 			console.log("in for loop with repeat");
 			codeList[i].piece.on("pressmove", function(evt) {
-				pleaseMove(i, evt, "repeat");
+				if (codeList[i].locked === 0) {
+					pleaseMove(i, evt, "repeat");
+				}
 			});
 		    //Calls pleaseDrop function when mouse is no longer clicked.
 			codeList[i].piece.on("pressup", function(evt) { 
-				console.log(whatKind + " drop");
-				pleaseDrop(i, evt, "repeat");
-				whichTime = 0;
+				if (codeList[i].locked === 0) {
+					pleaseDrop(i, evt, "repeat");
+					whichTime = 0;
+				}
 			});
 		}
 		else if (whatKind === "attack") {
