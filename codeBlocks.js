@@ -49,6 +49,20 @@ function init() {
 	stage.addChild(dropSite);
 	stage.update();
 
+	var repeatSite = new createjs.Shape();
+	repeatSite.graphics.beginFill("gray").drawRect(0,0,200,40);
+	repeatSite.x = leftSide;
+	repeatSite.y = topSpawn;
+	stage.addChild(repeatSite);
+	stage.update();
+
+	var attackSite = new createjs.Shape();
+	attackSite.graphics.beginFill("gray").drawRect(0,0,200,40);
+	attackSite.x = leftSide + 240;
+	attackSite.y = topSpawn;
+	stage.addChild(attackSite);
+	stage.update();
+
 	var createRepeatBlock = function() {
 		var repeatSet = new createjs.Graphics().beginFill("DeepSkyBlue").drawRect(0, 0, 200, 40);
 		var newRep = new createjs.Shape(repeatSet)
@@ -181,8 +195,8 @@ function init() {
 
 			// If the current point is closeEnough and the closest (so far)
 			// Then choose it to snap to.
-			var xSnapDistance = 80;
-			var closest = (diffX<xSnapDistance);
+			var ySnapDistance = 80;
+			var closest = (diffY<ySnapDistance);
 			if (closest) {
 				if (num === 0) {
 					if (kind === "attack") {
