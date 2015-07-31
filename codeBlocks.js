@@ -159,7 +159,7 @@ function init() {
 			console.log("Not in spawn, so add");
 			myScript.push(codeList[whatIndex].piece);
 		}
-		else{
+		else {
 			console.log("Snapping back to spawn");
 		}
 
@@ -167,6 +167,7 @@ function init() {
 		evt.currentTarget.x = neighbourX;
 		evt.currentTarget.y = neighbourY+40;
 		stage.update();
+		pointList.push(new Point(neighbourX, neighbourY, 0));
 	};
 
 
@@ -177,6 +178,10 @@ function init() {
 	var blockY;
 
 	for(var i=0;i< codeList.length; i++) {
+		//If the point list is longer than default pop last.
+		if (pointList.length > 2) {
+			pointList.pop;
+		}
 		//Calls pleaseMove function when mouse is clicked.
 		whatKind = codeList[i].kind;
 		instance = codeList[i];
@@ -263,7 +268,9 @@ function init() {
 	};
 
 	var getOriginal = function(object) {
+		//Go through point list.
 		for (i = 0; i < pointList.length; i++) {
+			//Check if the object is at that point.
 			if (object.y-40 === pointList[i]) {
 				origPos = i;
 				console.log(pointList[i]);
