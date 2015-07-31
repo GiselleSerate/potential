@@ -50,21 +50,21 @@ function init() {
 	stage.update();
 
 	var repeatSite = new createjs.Shape();
-	repeatSite.graphics.beginFill("gray").drawRect(0,0,200,40);
+	repeatSite.graphics.beginFill("#B2F0FF").drawRect(0,0,200,40);
 	repeatSite.x = leftSide;
 	repeatSite.y = topSpawn;
 	stage.addChild(repeatSite);
 	stage.update();
 
 	var attackSite = new createjs.Shape();
-	attackSite.graphics.beginFill("gray").drawRect(0,0,200,40);
+	attackSite.graphics.beginFill("#C2F0C2").drawRect(0,0,200,40);
 	attackSite.x = leftSide + 240;
 	attackSite.y = topSpawn;
 	stage.addChild(attackSite);
 	stage.update();
 
 	var createRepeatBlock = function() {
-		var repeatSet = new createjs.Graphics().beginFill("DeepSkyBlue").drawRect(0, 0, 200, 40);
+		var repeatSet = new createjs.Graphics().beginFill("#00CCFF").drawRect(0, 0, 200, 40);
 		var newRep = new createjs.Shape(repeatSet)
 		newRep.x = 0;
 		newRep.y = 0;
@@ -87,7 +87,7 @@ function init() {
 	createRepeatBlock();
 
 	var createAttackBlock = function() {
-		var attackSet = new createjs.Graphics().beginFill("purple").drawRect(0, 0, 200, 40);
+		var attackSet = new createjs.Graphics().beginFill("#00CC00").drawRect(0, 0, 200, 40);
 		var newAtt = new createjs.Shape(attackSet);		
 		newAtt.x = 0;
 		newAtt.y = 0;
