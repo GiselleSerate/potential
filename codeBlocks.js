@@ -68,6 +68,10 @@ function init() {
 		var newRep = new createjs.Shape(repeatSet)
 		newRep.x = 0;
 		newRep.y = 0;
+		repeatSet = new createjs.Graphics().beginFill("#00CCFF").drawRect(0, 0, 20, 40);
+		var newExt = new createjs.Shape(repeatSet)
+		newExt.x = 0;
+		newExt.y = 40;
 		//Creates label.
 		var label = new createjs.Text("repeat", "#000000");
 		label.textAlign = "center";
@@ -77,7 +81,7 @@ function init() {
 		var dragMe = new createjs.Container();
 		dragMe.x = leftSide;
 		dragMe.y = topSpawn;
-		dragMe.addChild(newRep, label);
+		dragMe.addChild(newRep, newExt, label);
 		var part = new CodePiece(dragMe, "repeat");
 		codeList.push(part);
 		stage.addChild(dragMe);
