@@ -26,7 +26,6 @@ function init() {
 	var bottomDrop = $('#demoCanvas').height();
 	var rightSide = $('#demoCanvas').width();
 	var leftSide = $('#demoCanvas').width()/2;
-	console.log(topSpawn + " " + topDrop + " " + bottomDrop + " " + leftSide + " " + rightSide); 
 
 	//Creates point constructor function. 
 	function Point(x, y) {
@@ -107,69 +106,94 @@ function init() {
 	}
 	
 	var pleaseMove = function(which, evt, kind) {
-		console.log("moving");
+		console.log("move" + kind);
 	    evt.currentTarget.x = evt.stageX;
 	    evt.currentTarget.y = evt.stageY;
 	    snapTo(which, kind);
-	    stage.update();
+	    stage.update();		
+	    whichTime += 1;
 	}
 
 
 	var pleaseDrop = function(which, evt, kind) {
-		console.log("up"); 
+		console.log("drop" + kind);
 		snapTo(which, kind);
 		//Snap object to neighbourX and neighbourY
 		evt.currentTarget.x = neighbourX;
 		evt.currentTarget.y = neighbourY+40;
-		// If neighbour has been reset and is not its initial value, snap to that and create a new repeat block in the old place. 
-		if(neighbourY !== pointList[0].y) {
-			if(evt.target.type === "repeat") {
-				console.log("repeat");
-		    	createRepeatBlock();
-			}
-			else if(evt.target.type === "attack") {
-				console.log("attack");
-				createAttackBlock();
-			}
-		}
+		// // If neighbour has been reset and is not its initial value, snap to that and create a new repeat block in the old place. 
+		// if(neighbourY !== pointList[0].y) {
+		// 	if(evt.target.type === "repeat") {
+			// 	console.log("repeat");
+		 //    	createRepeatBlock();
+			// }
+			// else if(evt.target.type === "attack") {
+			// 	console.log("attack");
+			// 	createAttackBlock();
+			// }
+		// }
 		stage.update();
-		whichTime += 1;
 	};
 
 
+	console.log(codeList);
+
+	var whatKind;
+
 	for(var i=0;i< codeList.length; i++) {
 		//Calls pleaseMove function when mouse is clicked.
-		var whatKind = codeList[i].kind;
-		codeList[i].piece.on("pressmove", function(evt) {
-			pleaseMove(i, evt, whatKind);
-		});
-	    //Calls pleaseDrop function when mouse is no longer clicked.
-		codeList[i].piece.on("pressup", function(evt) { 
-			pleaseDrop(i, evt, whatKind);
-			whichTime = 0;
-		})
+		whatKind = codeList[i].kind;
+		console.log("loop" + whatKind);
+		if (whatKind === "repeat") {
+			console.log("in for loop with repeat");
+			codeList[i].piece.on("pressmove", function(evt) {
+				pleaseMove(i, evt, "repeat");
+			});
+		    //Calls pleaseDrop function when mouse is no longer clicked.
+			codeList[i].piece.on("pressup", function(evt) { 
+				console.log(whatKind + " drop");
+				pleaseDrop(i, evt, "repeat");
+				whichTime = 0;
+			});
+		}
+		else if (whatKind === "attack") {
+			console.log("in for loop with attack");
+			codeList[i].piece.on("pressmove", function(evt) {
+				pleaseMove(i, evt, "attack");
+			});
+		    //Calls pleaseDrop function when mouse is no longer clicked.
+			codeList[i].piece.on("pressup", function(evt) { 
+				console.log(whatKind + " drop");
+				pleaseDrop(i, evt, "attack");
+				whichTime = 0;
+			});
+		}
 	}
 
 	// Snaps block to anything that exists in the working space
 	var snapTo = function(index, kind) {
+		console.log(whichTime);
+		console.log("snap" + kind);
 		for(var num = 0; num < pointList.length; num++) {
-			//console.log("x " + pointList[num].x);
-			//console.log("mousex " + MouseEvent.stageX);
-			// Determine the distance from the mouse position to the point
+			// Determine the x and y distances from the mouse position to the point
 			var diffX = Math.abs(cursorX - pointList[num].x);
 			var diffY = Math.abs(cursorY - pointList[num].y); 
-			console.log(diffX + " " + diffY)
-			//var d = Math.sqrt(diffX*diffX + diffY*diffY);        
 
 			// If the current point is closeEnough and the closest (so far)
 			// Then choose it to snap to.
 			var xSnapDistance = 80;
-			var ySnapDistance = 80;
-			//var closest = (d<snapDistance && (dist == null || d < dist));
-			var closest = (diffX<xSnapDistance && diffY<ySnapDistance);
+			var closest = (diffX<xSnapDistance);
 			if (closest) {
-				neighbourX = pointList[num].x;
-				console.log(pointList[num].x);
+				if (num === 0) {
+					if (kind === "attack") {
+						neighbourX = pointList[num].x + 240;
+						console.log("Oh snap! Attack-type")
+					}
+				}
+				else {
+					neighbourX = pointList[num].x;
+					console.log("Snap somewhere else")
+				}
 				neighbourY = pointList[num].y;
 				console.log("new closest");
 			}
@@ -178,9 +202,11 @@ function init() {
 				neighbourY = pointList[0].y;
 				if (kind === "repeat") {
 					neighbourX = pointList[0].x;
+					console.log("no snap repeat")
 				}
 				else if (kind === "attack") {
 					neighbourX = pointList[0].x + 240;
+					console.log("no snap attack")
 				}
 				
 			}          
