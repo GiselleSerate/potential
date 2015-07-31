@@ -34,11 +34,14 @@ function init() {
 		this.y = y;
 	}
 
-	//Creates array for storing possible points to snap to. 
-	var pointList = [new Point(leftSide, topSpawn-40), new Point(leftSide, topDrop-40)];
+	//Creates array for storing possible points to snap to. Points indicate the TOP LEFT OF THE BLOCK
+	var pointList = [new Point(leftSide, topSpawn-40), new Point(leftSide, topDrop)];
 
 	var neighbourX;
 	var neighbourY;
+
+	//Creates array for storing block types to run.
+	var myScript = [];
 
 	var dropSite = new createjs.Shape();
 	dropSite.graphics.beginFill("gray").drawRect(0,0,200,40);
@@ -103,27 +106,29 @@ function init() {
 		}
 	}
 	
-	var pleaseMove = function(which, evt) {
+	var pleaseMove = function(which, evt, kind) {
 		console.log("moving");
 	    evt.currentTarget.x = evt.stageX;
 	    evt.currentTarget.y = evt.stageY;
-	    snapTo(which);
+	    snapTo(which, kind);
 	    stage.update();
 	}
 
 
-	var pleaseDrop = function(which, evt) {
+	var pleaseDrop = function(which, evt, kind) {
 		console.log("up"); 
-		snapTo(which);
+		snapTo(which, kind);
 		//Snap object to neighbourX and neighbourY
 		evt.currentTarget.x = neighbourX;
 		evt.currentTarget.y = neighbourY+40;
 		// If neighbour has been reset and is not its initial value, snap to that and create a new repeat block in the old place. 
-		if(neighbourX !== pointList[0].x && neighbourY !== pointList[0].y) {
+		if(neighbourY !== pointList[0].y) {
 			if(evt.target.type === "repeat") {
+				console.log("repeat");
 		    	createRepeatBlock();
 			}
 			else if(evt.target.type === "attack") {
+				console.log("attack");
 				createAttackBlock();
 			}
 		}
@@ -134,23 +139,19 @@ function init() {
 
 	for(var i=0;i< codeList.length; i++) {
 		//Calls pleaseMove function when mouse is clicked.
-		console.log(codeList[i]);
-		var floor = codeList[i].piece
-		console.log("floor")
-		console.log(floor);
-	    codeList[i].piece.on("pressmove", function(evt) {
-			pleaseMove(i, evt);
+		var whatKind = codeList[i].kind;
+		codeList[i].piece.on("pressmove", function(evt) {
+			pleaseMove(i, evt, whatKind);
 		});
-
 	    //Calls pleaseDrop function when mouse is no longer clicked.
 		codeList[i].piece.on("pressup", function(evt) { 
-			pleaseDrop(i, evt);
+			pleaseDrop(i, evt, whatKind);
 			whichTime = 0;
 		})
 	}
 
 	// Snaps block to anything that exists in the working space
-	var snapTo = function(index) {
+	var snapTo = function(index, kind) {
 		for(var num = 0; num < pointList.length; num++) {
 			//console.log("x " + pointList[num].x);
 			//console.log("mousex " + MouseEvent.stageX);
@@ -162,8 +163,8 @@ function init() {
 
 			// If the current point is closeEnough and the closest (so far)
 			// Then choose it to snap to.
-			var xSnapDistance = 50;
-			var ySnapDistance = 50;
+			var xSnapDistance = 80;
+			var ySnapDistance = 80;
 			//var closest = (d<snapDistance && (dist == null || d < dist));
 			var closest = (diffX<xSnapDistance && diffY<ySnapDistance);
 			if (closest) {
@@ -174,8 +175,14 @@ function init() {
 			}
 			//Else if it's the first time through in a new drag sequence, set neighbourX and neighbourY to the block's initial coordinates.
 			else if (whichTime === 0) {
-				neighbourX = pointList[0].x;
 				neighbourY = pointList[0].y;
+				if (kind === "repeat") {
+					neighbourX = pointList[0].x;
+				}
+				else if (kind === "attack") {
+					neighbourX = pointList[0].x + 240;
+				}
+				
 			}          
 			//Else, leave neighbourX and neighbourY as whatever they were the last time you ran snapTo.
 		}
