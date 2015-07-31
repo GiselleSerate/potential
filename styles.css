@@ -85,3 +85,15 @@ p {
 #secondPage, #thirdPage, #fourthPage {
 	visibility: hidden;
 }
+
+#credits {
+	text-align: center;
+	visibility: visible;
+	color: white;
+	background-color: black;
+}
+
+#center {
+	padding: 0px;
+	text-align: center;
+}
