@@ -1,14 +1,34 @@
+var counter = 1;
 $(document).ready(function () {
-	 $("#startButton").append('<img src = "StartButton.png" onclick="nextPage()">');
-     $("#Logo").append('<p id= "title"> Potential</p><p id= "subtitle"> An interactive story adventure!</p>');
+	$("#startButton").append('<img src = "StartButton.png" onclick="nextPage()">');
+    $("#Logo").append('<p id= "title"> Potential</p><p id= "subtitle"> An interactive story adventure!</p>');
 });
 
 
-
 var nextPage = function(){
-	document.getElementById("Logo").style.visibility = "hidden";
-	document.getElementById("startButton").style.visibility = "hidden";
-	document.getElementById("background1").style.visibility = "hidden";
-	document.getElementById("cutscene1").style.visibility = "visible";
-	document.getElementById("textBox1").style.visibility  = "visible";
+	counter = counter + 1
+	console.log(counter)
+	document.querySelector(".pages").style.visibility = "hidden";
+	if (counter === 2){
+		document.getElementById("secondPage").style.visibility = "visible";
+	}
+	if (counter === 3) {
+		document.getElementById("secondPage").style.visibility = "hidden";
+		document.getElementById("thirdPage").style.visibility = "visible";
+	}
+	if (counter === 4) {
+		document.getElementById("thirdPage").style.visibility = "hidden";
+		document.getElementById("fourthPage").style.visibility = "visible";
+	}
 }
+
+$(document).keydown(function(e) {
+    switch(e.which) {
+        case 39: // right
+        nextPage();
+        break;
+
+        default: return; // exit this handler for other keys
+    }
+    e.preventDefault(); // prevent the default action (scroll / move caret)
+});
