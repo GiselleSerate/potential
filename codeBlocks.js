@@ -138,9 +138,31 @@ function init() {
 	}
 
 
-	var pleaseDrop = function(which, evt, kind) {
-		console.log("drop" + kind);
-		snapTo(which, kind);
+	var pleaseDrop = function(instance, evt, kind) {
+		//Sets variable whatIndex depending on the type of block
+		if (kind === "repeat") {
+			whatIndex = 0;
+		}
+		else {
+			whatIndex = 1;
+		}
+
+		//console.logs various things
+		console.log("blockY " + codeList[whatIndex].piece.y);
+		console.log("pointList " + pointList[1].y);
+
+		snapTo(blockY, kind);
+
+		//If the neighbour's y value is below 70 (probably in drop) add it to the thingy. 
+		if (neighbourY>70) {
+			//not in spawn, so add
+			console.log("Not in spawn, so add");
+			myScript.push(codeList[whatIndex].piece);
+		}
+		else{
+			console.log("Snapping back to spawn");
+		}
+
 		//Snap object to neighbourX and neighbourY
 		evt.currentTarget.x = neighbourX;
 		evt.currentTarget.y = neighbourY+40;
@@ -152,12 +174,14 @@ function init() {
 
 	var whatKind;
 	var instance;
+	var blockY;
 
 	for(var i=0;i< codeList.length; i++) {
-
 		//Calls pleaseMove function when mouse is clicked.
 		whatKind = codeList[i].kind;
 		instance = codeList[i];
+		blockY = codeList[i].piece.y;
+		console.log("HI IT'S BLOCKY MY VALUE IS " + blockY);
 		if (whatKind === "repeat") {
 			console.log("in for loop with repeat");
 			codeList[i].piece.on("pressmove", function(evt) {
@@ -165,13 +189,14 @@ function init() {
 					//Save position of thing if it's the first time through
 					if (whichTime === 0) {
 						getOriginal(instance);
+
 					}
-					pleaseMove(i, evt, "repeat");
+					pleaseMove(instance, evt, "repeat");
 				}
 			});
 		    //Calls pleaseDrop function when mouse is no longer clicked.
 			codeList[i].piece.on("pressup", function(evt) { 	
-				pleaseDrop(i, evt, "repeat");
+				pleaseDrop(instance, evt, "repeat");
 				whichTime = 0;
 			});
 		}
@@ -183,13 +208,13 @@ function init() {
 					if (whichTime === 0) {
 						getOriginal(instance);
 					}
-					pleaseMove(i, evt, "attack");
+					pleaseMove(blockY, evt, "attack");
 				}
 			});
 		    //Calls pleaseDrop function when mouse is no longer clicked.
 			codeList[i].piece.on("pressup", function(evt) { 
 				console.log(whatKind + " drop");
-				pleaseDrop(i, evt, "attack");
+				pleaseDrop(blockY, evt, "attack");
 				whichTime = 0;
 			});
 		}
@@ -208,17 +233,19 @@ function init() {
 			// Then choose it to snap to.
 			var ySnapDistance = 80;
 			var closest = (diffY<ySnapDistance);
-			if (closest) {
-				if (num === 0) {
-					if (kind === "attack") {
-						neighbourX = pointList[num].x + 240;
+			if (pointList[num].hasBlock === 0) {
+				if (closest) {
+					if (num === 0) {
+						if (kind === "attack") {
+							neighbourX = pointList[num].x + 240;
+						}
 					}
+					else {
+						neighbourX = pointList[num].x;
+					}
+					neighbourY = pointList[num].y;
+					console.log("new closest");
 				}
-				else {
-					neighbourX = pointList[num].x;
-				}
-				neighbourY = pointList[num].y;
-				console.log("new closest");
 			}
 			//Else if it's the first time through in a new drag sequence, set neighbourX and neighbourY to the block's initial coordinates.
 			else if (whichTime === 0) {
@@ -238,7 +265,11 @@ function init() {
 	var getOriginal = function(object) {
 		for (i = 0; i < pointList.length; i++) {
 			if (object.y-40 === pointList[i]) {
-				origPos = pointList[i];
+				origPos = i;
+				console.log(pointList[i]);
+				//Says this point no longer has a block because you just dragged it out.
+				pointList[i].hasBlock = 0;
+				myScript.pop;
 				return;
 			}
 		}
