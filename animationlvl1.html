@@ -22,7 +22,7 @@
     <script>
 
         //create variables you need
-        var stage;
+        var stage, instance2;
 
         function init() {
 
@@ -45,6 +45,7 @@
                 frames: {width:72, height:128, count:3},
                 //define animations here by giving frame indexes (remember to start at zero)
                 animations: {
+                    stand:0,
                     run:[0,2]
                 }
             };
@@ -55,12 +56,12 @@
             var ss2 = new createjs.SpriteSheet(data2);
             //create animation from the sprite sheet
             var instance = new createjs.Sprite(ss);
-            var instance2 = new createjs.Sprite(ss2);
+            instance2 = new createjs.Sprite(ss2);
 
             //give your animation starting coordinates: (0,0) is top left
-            instance.x = 450;
+            instance.x = 550;
             instance.y = 400;
-            instance2.x = 150;
+            //instance2.x = 0;
             instance2.y = 450;
 
             //need to add instance to stage (everything needs to be added to the stage)
@@ -74,11 +75,18 @@
 
 
             //these two lines continully update the stage
-            createjs.Ticker.setFPS(5);
-            createjs.Ticker.addEventListener("tick", stage);
+            createjs.Ticker.setFPS(6);
+            createjs.Ticker.addEventListener("tick", tick);
 
 
-
+        }
+        function tick(event) {
+            instance2.x = instance2.x + 10;
+            if (instance2.x > 250) { 
+                instance2.gotoAndPlay("stand"); 
+                return false;
+            }
+            stage.update(event); // important!!
         }
 
     </script>
