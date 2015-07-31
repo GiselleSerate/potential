@@ -9,6 +9,9 @@ function init() {
 
 	var whichTime = 0;
 
+	//Saves the original position that you're dragging it from: using Point object type even though hasBlock is supremely irrelevant
+	var origPos;
+
 	var stage = new createjs.Stage("demoCanvas");
 
 	//Constructor function for code pieces.
@@ -29,13 +32,14 @@ function init() {
 	var leftSide = $('#demoCanvas').width()/2;
 
 	//Creates point constructor function. 
-	function Point(x, y) {
+	function Point(x, y, hasBlock) {
 		this.x = x;
 		this.y = y;
+		this.hasBlock = hasBlock;
 	}
 
 	//Creates array for storing possible points to snap to. Points indicate the TOP LEFT OF THE BLOCK
-	var pointList = [new Point(leftSide, topSpawn-40), new Point(leftSide, topDrop)];
+	var pointList = [new Point(leftSide, topSpawn-40, 0), new Point(leftSide, topDrop, 0)];
 
 	var neighbourX;
 	var neighbourY;
@@ -140,17 +144,6 @@ function init() {
 		//Snap object to neighbourX and neighbourY
 		evt.currentTarget.x = neighbourX;
 		evt.currentTarget.y = neighbourY+40;
-		// // If neighbour has been reset and is not its initial value, snap to that and create a new repeat block in the old place. 
-		// if(neighbourY !== pointList[0].y) {
-		// 	if(evt.target.type === "repeat") {
-			// 	console.log("repeat");
-		 //    	createRepeatBlock();
-			// }
-			// else if(evt.target.type === "attack") {
-			// 	console.log("attack");
-			// 	createAttackBlock();
-			// }
-		// }
 		stage.update();
 	};
 
@@ -158,30 +151,40 @@ function init() {
 	console.log(codeList);
 
 	var whatKind;
+	var instance;
 
 	for(var i=0;i< codeList.length; i++) {
+
 		//Calls pleaseMove function when mouse is clicked.
 		whatKind = codeList[i].kind;
-		console.log("loop" + whatKind);
+		instance = codeList[i];
 		if (whatKind === "repeat") {
 			console.log("in for loop with repeat");
 			codeList[i].piece.on("pressmove", function(evt) {
-				if (codeList[i].locked === 0) {
+				if (instance.locked === 0) {
+					//Save position of thing if it's the first time through
+					if (whichTime === 0) {
+						getOriginal(instance);
+					}
 					pleaseMove(i, evt, "repeat");
 				}
 			});
 		    //Calls pleaseDrop function when mouse is no longer clicked.
-			codeList[i].piece.on("pressup", function(evt) { 
-				if (codeList[i].locked === 0) {
-					pleaseDrop(i, evt, "repeat");
-					whichTime = 0;
-				}
+			codeList[i].piece.on("pressup", function(evt) { 	
+				pleaseDrop(i, evt, "repeat");
+				whichTime = 0;
 			});
 		}
 		else if (whatKind === "attack") {
 			console.log("in for loop with attack");
 			codeList[i].piece.on("pressmove", function(evt) {
-				pleaseMove(i, evt, "attack");
+				if (instance.locked === 0) {
+					//Save position of thing if it's the first time through
+					if (whichTime === 0) {
+						getOriginal(instance);
+					}
+					pleaseMove(i, evt, "attack");
+				}
 			});
 		    //Calls pleaseDrop function when mouse is no longer clicked.
 			codeList[i].piece.on("pressup", function(evt) { 
@@ -209,12 +212,10 @@ function init() {
 				if (num === 0) {
 					if (kind === "attack") {
 						neighbourX = pointList[num].x + 240;
-						console.log("Oh snap! Attack-type")
 					}
 				}
 				else {
 					neighbourX = pointList[num].x;
-					console.log("Snap somewhere else")
 				}
 				neighbourY = pointList[num].y;
 				console.log("new closest");
@@ -224,15 +225,23 @@ function init() {
 				neighbourY = pointList[0].y;
 				if (kind === "repeat") {
 					neighbourX = pointList[0].x;
-					console.log("no snap repeat")
 				}
 				else if (kind === "attack") {
 					neighbourX = pointList[0].x + 240;
-					console.log("no snap attack")
 				}
 				
 			}          
 			//Else, leave neighbourX and neighbourY as whatever they were the last time you ran snapTo.
 		}
+	};
+
+	var getOriginal = function(object) {
+		for (i = 0; i < pointList.length; i++) {
+			if (object.y-40 === pointList[i]) {
+				origPos = pointList[i];
+				return;
+			}
+		}
+		console.log("ERROR ERROR HELP ME COULDN'T FIND ORIGINAL POINT")
 	};
 }
