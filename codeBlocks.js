@@ -152,7 +152,7 @@ function init() {
 		if (neighbourY>70) {
 			//not in spawn, so add
 			console.log("Not in spawn, so add");
-			myScript.push(codeList[whatIndex].piece);
+			myScript.push(codeList[whatIndex]);
 			pointList[pointList.length - 1].hasBlock = 1
 		}
 		else {
@@ -176,14 +176,15 @@ function init() {
 
 		//Checking win case.
 		if (myScript.length > 1) {
-			console.log(myScript);
-			console.log(myScript[0]);
-			console.log(myScript[0].kind + " and " + myScript[1].kind);
+			// console.log(myScript);
+			// console.log(myScript[0]);
+			// console.log(myScript[0].kind + " and " + myScript[1].kind);
 			if (myScript[0].kind === "repeat") {
 				console.log("First is a repeat");
 				if (myScript[1].kind === "attack") {
 					console.log("Second is attack");
-					alert("You won!");
+					//alert("You won!");
+					console.log("WIN CASE REACHED");
 				}
 			}
 		}
@@ -197,6 +198,7 @@ function init() {
 	var blockY;
 
 	for(var i=0;i< codeList.length; i++) {
+
 		//If the point list is longer than default pop last.
 		if (pointList.length > 2) {
 			pointList.pop;
@@ -209,7 +211,8 @@ function init() {
 		if (whatKind === "repeat") {
 			console.log("in for loop with repeat");
 			codeList[i].piece.on("pressmove", function(evt) {
-				if (isUnlocked(blockY)) {
+				if (isUnlocked(i)) {
+					console.log("This component is unlocked. Go ahead.");
 					//Save position of thing if it's the first time through
 					if (whichTime === 0) {
 						getOriginal(instance);
@@ -324,21 +327,26 @@ function init() {
 		}
 	};
 
-	var isUnlocked = function(y) {
-		if (y < 41) {
+	var isUnlocked = function(index) {
+		console.log(index);
+		console.log(codeList);
+		var coord = codeList[index].piece.y
+		console.log("y is " + coord);
+		if (coord < 40) {
 			//This means it's in the spawn area. You can drag it.
 			console.log("In spawn area");
-			console.log(y);
+			console.log(coord);
 			return true;
 		}
 		//Putting the spawn area ensures that you don't try to check elements of myScript before there are any elements in the list.
-		else if (myScript[myScript.length - 1].piece.y = y) {
+		else if (myScript[myScript.length - 1].piece.y = coord) {
 			//This means it's the last block in the script. You can drag it. 
-			console.log("Last block in the script")
+			console.log("Last block in the script");
 			return true;
 		}
 		else {
 			//It must be behind another block. Do not drag it.
+			console.log("GO AWAY DO NOT DRAGGY ME");
 			return false;
 		}
 	}
