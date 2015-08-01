@@ -153,11 +153,13 @@ function init() {
 
 		snapTo(blockY, kind);
 
-		//If the neighbour's y value is below 70 (probably in drop) add it to the thingy. 
+		//If the neighbour's y value is below 70 (probably in drop) add it to myScript. 
 		if (neighbourY>70) {
 			//not in spawn, so add
 			console.log("Not in spawn, so add");
 			myScript.push(codeList[whatIndex].piece);
+			console.log(myScript);
+			pointList[pointList.length - 1].hasBlock = 1
 		}
 		else {
 			console.log("Snapping back to spawn");
@@ -167,7 +169,9 @@ function init() {
 		evt.currentTarget.x = neighbourX;
 		evt.currentTarget.y = neighbourY+40;
 		stage.update();
-		pointList.push(new Point(neighbourX, neighbourY, 0));
+		pointList.push(new Point(neighbourX, neighbourY + 40, 0));
+		console.log("New Point Added to Point List");
+		console.log(pointList);
 	};
 
 
@@ -186,7 +190,7 @@ function init() {
 		whatKind = codeList[i].kind;
 		instance = codeList[i];
 		blockY = codeList[i].piece.y;
-		console.log("HI IT'S BLOCKY MY VALUE IS " + blockY);
+		// console.log("HI IT'S BLOCKY MY VALUE IS " + blockY);
 		if (whatKind === "repeat") {
 			console.log("in for loop with repeat");
 			codeList[i].piece.on("pressmove", function(evt) {
@@ -238,6 +242,10 @@ function init() {
 			// Then choose it to snap to.
 			var ySnapDistance = 80;
 			var closest = (diffY<ySnapDistance);
+			// console.log(kind);
+			// console.log("hasBlock checker " + pointList[num].hasBlock);
+
+			//If the point does not have a block (hasBlock is 0 not 1), then assign it as the new point to snap to. 
 			if (pointList[num].hasBlock === 0) {
 				if (closest) {
 					if (num === 0) {
@@ -252,6 +260,7 @@ function init() {
 					console.log("new closest");
 				}
 			}
+
 			//Else if it's the first time through in a new drag sequence, set neighbourX and neighbourY to the block's initial coordinates.
 			else if (whichTime === 0) {
 				neighbourY = pointList[0].y;
@@ -261,25 +270,42 @@ function init() {
 				else if (kind === "attack") {
 					neighbourX = pointList[0].x + 240;
 				}
-				
 			}          
 			//Else, leave neighbourX and neighbourY as whatever they were the last time you ran snapTo.
 		}
 	};
 
 	var getOriginal = function(object) {
+
+		//Debug lines.
+		var purplePie = object.piece.y;
+		console.log("object.piece.y " + purplePie);
+		//End of debug lines.
+
 		//Go through point list.
 		for (i = 0; i < pointList.length; i++) {
+
+			//Debug lines.
+			var pinkiePie = pointList[i].y + 40;
+			console.log("checking pointList[i] " + pinkiePie);
+			var itsABool = (String(purplePie) === String(pinkiePie));
+			console.log("if condition " + itsABool);
+			//End of debug lines.
+
 			//Check if the object is at that point.
-			if (object.y-40 === pointList[i]) {
+			// if (object.y-40 === pointList[i].y) {
+			if (itsABool) {
+				console.log("Made it into the if statement");
 				origPos = i;
+				console.log("Removing point from pointList");
 				console.log(pointList[i]);
 				//Says this point no longer has a block because you just dragged it out.
 				pointList[i].hasBlock = 0;
 				myScript.pop;
-				return;
+			}
+			else {
+				console.log("Not in. Don't know why. Fix me.");
 			}
 		}
-		console.log("ERROR ERROR HELP ME COULDN'T FIND ORIGINAL POINT")
 	};
 }
