@@ -129,7 +129,6 @@ function init() {
 	}
 	
 	var pleaseMove = function(which, evt, kind) {
-		console.log("move" + kind);
 	    evt.currentTarget.x = evt.stageX;
 	    evt.currentTarget.y = evt.stageY;
 	    snapTo(which, kind);
@@ -147,10 +146,6 @@ function init() {
 			whatIndex = 1;
 		}
 
-		//console.logs various things
-		console.log("blockY " + codeList[whatIndex].piece.y);
-		console.log("pointList " + pointList[1].y);
-
 		snapTo(blockY, kind);
 
 		//If the neighbour's y value is below 70 (probably in drop) add it to myScript. 
@@ -158,7 +153,6 @@ function init() {
 			//not in spawn, so add
 			console.log("Not in spawn, so add");
 			myScript.push(codeList[whatIndex].piece);
-			console.log(myScript);
 			pointList[pointList.length - 1].hasBlock = 1
 		}
 		else {
@@ -169,9 +163,30 @@ function init() {
 		evt.currentTarget.x = neighbourX;
 		evt.currentTarget.y = neighbourY+40;
 		stage.update();
-		pointList.push(new Point(neighbourX, neighbourY + 40, 0));
-		console.log("New Point Added to Point List");
+		if (pointList[pointList.length - 1].hasBlock === 1) {
+			//If the last point in pointList is full, make a new slot.
+			pointList.push(new Point(neighbourX, neighbourY + 40, 0));
+			console.log("New Point Added to Point List");
+		}
+		else if (pointList[pointList.length - 1].hasBlock === 0) {
+			//If the last point in pointList is not full, do not make a new slot.
+			console.log("No new point added to point list, but we got here.");
+		}
 		console.log(pointList);
+
+		//Checking win case.
+		if (myScript.length > 1) {
+			console.log(myScript);
+			console.log(myScript[0]);
+			console.log(myScript[0].kind + " and " + myScript[1].kind);
+			if (myScript[0].kind === "repeat") {
+				console.log("First is a repeat");
+				if (myScript[1].kind === "attack") {
+					console.log("Second is attack");
+					alert("You won!");
+				}
+			}
+		}
 	};
 
 
@@ -190,17 +205,20 @@ function init() {
 		whatKind = codeList[i].kind;
 		instance = codeList[i];
 		blockY = codeList[i].piece.y;
-		// console.log("HI IT'S BLOCKY MY VALUE IS " + blockY);
+		console.log("HI IT'S BLOCKY MY VALUE IS " + blockY);
 		if (whatKind === "repeat") {
 			console.log("in for loop with repeat");
 			codeList[i].piece.on("pressmove", function(evt) {
-				if (instance.locked === 0) {
+				if (isUnlocked(blockY)) {
 					//Save position of thing if it's the first time through
 					if (whichTime === 0) {
 						getOriginal(instance);
 
 					}
 					pleaseMove(instance, evt, "repeat");
+				}
+				else {
+					console.log("Component locked. Go away.");
 				}
 			});
 		    //Calls pleaseDrop function when mouse is no longer clicked.
@@ -212,17 +230,19 @@ function init() {
 		else if (whatKind === "attack") {
 			console.log("in for loop with attack");
 			codeList[i].piece.on("pressmove", function(evt) {
-				if (instance.locked === 0) {
+				if (isUnlocked(blockY)) {
 					//Save position of thing if it's the first time through
 					if (whichTime === 0) {
 						getOriginal(instance);
 					}
 					pleaseMove(blockY, evt, "attack");
 				}
+				else {
+					console.log("Component locked. Go away.");
+				}
 			});
 		    //Calls pleaseDrop function when mouse is no longer clicked.
 			codeList[i].piece.on("pressup", function(evt) { 
-				console.log(whatKind + " drop");
 				pleaseDrop(blockY, evt, "attack");
 				whichTime = 0;
 			});
@@ -231,8 +251,6 @@ function init() {
 
 	// Snaps block to anything that exists in the working space
 	var snapTo = function(index, kind) {
-		console.log(whichTime);
-		console.log("snap" + kind);
 		for(var num = 0; num < pointList.length; num++) {
 			// Determine the x and y distances from the mouse position to the point
 			var diffX = Math.abs(cursorX - pointList[num].x);
@@ -242,8 +260,6 @@ function init() {
 			// Then choose it to snap to.
 			var ySnapDistance = 80;
 			var closest = (diffY<ySnapDistance);
-			// console.log(kind);
-			// console.log("hasBlock checker " + pointList[num].hasBlock);
 
 			//If the point does not have a block (hasBlock is 0 not 1), then assign it as the new point to snap to. 
 			if (pointList[num].hasBlock === 0) {
@@ -257,7 +273,6 @@ function init() {
 						neighbourX = pointList[num].x;
 					}
 					neighbourY = pointList[num].y;
-					console.log("new closest");
 				}
 			}
 
@@ -308,4 +323,23 @@ function init() {
 			}
 		}
 	};
+
+	var isUnlocked = function(y) {
+		if (y < 41) {
+			//This means it's in the spawn area. You can drag it.
+			console.log("In spawn area");
+			console.log(y);
+			return true;
+		}
+		//Putting the spawn area ensures that you don't try to check elements of myScript before there are any elements in the list.
+		else if (myScript[myScript.length - 1].piece.y = y) {
+			//This means it's the last block in the script. You can drag it. 
+			console.log("Last block in the script")
+			return true;
+		}
+		else {
+			//It must be behind another block. Do not drag it.
+			return false;
+		}
+	}
 }
