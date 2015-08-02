@@ -148,15 +148,11 @@ function init() {
 
 		snapTo(blockY, kind);
 
-		//If the neighbour's y value is below 70 (probably in drop) add it to myScript. 
+		//If the neighbour's y value is below 70 (which means it is in drop) add it to myScript. 70 is arbitrary and could probably be 40 or something. 
 		if (neighbourY>70) {
-			//not in spawn, so add
-			console.log("Not in spawn, so add");
+			//Not in spawn, so add it.
 			myScript.push(codeList[whatIndex]);
 			pointList[pointList.length - 1].hasBlock = 1
-		}
-		else {
-			console.log("Snapping back to spawn");
 		}
 
 		//Snap object to neighbourX and neighbourY
@@ -166,33 +162,21 @@ function init() {
 		if (pointList[pointList.length - 1].hasBlock === 1) {
 			//If the last point in pointList is full, make a new slot.
 			pointList.push(new Point(neighbourX, neighbourY + 40, 0));
-			console.log("New Point Added to Point List");
 		}
-		else if (pointList[pointList.length - 1].hasBlock === 0) {
-			//If the last point in pointList is not full, do not make a new slot.
-			console.log("No new point added to point list, but we got here.");
-		}
-		console.log(pointList);
+		//Otherwise, if the last point in pointList is not full, do not make a new slot.
 
 		//Checking win case.
 		if (myScript.length > 1) {
-			// console.log(myScript);
-			// console.log(myScript[0]);
-			// console.log(myScript[0].kind + " and " + myScript[1].kind);
 			if (myScript[0].kind === "repeat") {
 				console.log("First is a repeat");
 				if (myScript[1].kind === "attack") {
 					console.log("Second is attack");
-					//alert("You won!");
 					console.log("WIN CASE REACHED");
 					winCase();
 				}
 			}
 		}
 	};
-
-
-	console.log(codeList);
 
 	var whatKind;
 	var instance;
@@ -209,11 +193,9 @@ function init() {
 		whatKind = codeList[i].kind;
 		instance = codeList[i];
 		blockY = codeList[i].piece.y;
-		console.log("HI IT'S BLOCKY MY VALUE IS " + blockY + " whatKind is " + whatKind);
 		
 		//What to do if the block type is repeat.
 		if (whatKind === "repeat") {
-			console.log("in for loop with repeat");
 
 			//The following (including pleaseMove and some conditions) is called when mouse is clicked.
 			codeList[i].piece.on("pressmove", function(evt) {
@@ -227,7 +209,7 @@ function init() {
 					condition = true;
 				}
 				if (condition) {
-					console.log("This component is unlocked. Go ahead.");
+					//This component is unlocked. Go ahead.
 					//Save position of thing if it's the first time through
 					if (whichTime === 0) {
 						getOriginal(instance);
@@ -235,22 +217,19 @@ function init() {
 					}
 					pleaseMove(instance, evt, "repeat");
 				}
-				else {
-					console.log("Component locked. Go away.");
-				}
+				//Otherwise, the component is locked. Go away.
 			});
 
 		    //Calls pleaseDrop function when mouse is no longer clicked.
 			codeList[i].piece.on("pressup", function(evt) { 	
 				pleaseDrop(instance, evt, "repeat");
+				//Resets whichTime to reset the indicator that tells you if it's the first part of the drag sequence.
 				whichTime = 0;
-				// lockStatus = 0;
 			});
 		}
 
 		//What to do if the block type is attack.
 		else if (whatKind === "attack") {
-			console.log("in for loop with attack");
 			codeList[i].piece.on("pressmove", function(evt) {
 				//I should only be checking this once, on the first step of the drag. 
 				if (whichTime === 0) {
@@ -268,9 +247,7 @@ function init() {
 					}
 					pleaseMove(blockY, evt, "attack");
 				}
-				else {
-					console.log("Component locked. Go away.");
-				}
+				//Otherwise, the component is locked. Go away.");
 			});
 		    //Calls pleaseDrop function when mouse is no longer clicked.
 			codeList[i].piece.on("pressup", function(evt) { 
@@ -322,67 +299,50 @@ function init() {
 	};
 
 	var getOriginal = function(object) {
-
-		//Debug lines.
-		var purplePie = object.piece.y;
-		console.log("object.piece.y " + purplePie);
-		//End of debug lines.
-
+		var objY = object.piece.y;
 		//Go through point list.
 		for (i = 0; i < pointList.length; i++) {
-
-			//Debug lines.
-			var pinkiePie = pointList[i].y + 40;
-			console.log("checking pointList[i] " + pinkiePie);
-			var itsABool = (String(purplePie) === String(pinkiePie));
-			console.log("if condition " + itsABool);
-			//End of debug lines.
-
+			var storedY = pointList[i].y + 40;
+			var itsABool = (String(objY) === String(storedY));
 			//Check if the object is at that point.
-			// if (object.y-40 === pointList[i].y) {
 			if (itsABool) {
-				console.log("Made it into the if statement");
 				origPos = i;
-				console.log("Removing point from pointList");
-				console.log(pointList[i]);
 				//Says this point no longer has a block because you just dragged it out.
 				pointList[i].hasBlock = 0;
 				myScript.pop;
-			}
-			else {
-				console.log("Not in. Don't know why. Fix me.");
 			}
 		}
 	};
 
 	var isUnlocked = function(index) {
-		//In which many things are console.logged.
-		console.log(index);
-		console.log(codeList);
-
 		var coord = codeList[index].piece.y;
-		console.log("y is " + coord);
-		console.log(myScript.length);
 		if (coord <= 40 || myScript.length === 0) {
 			//This means it's in the spawn area. You can drag it.
-			console.log("In spawn area");
-			console.log(coord);
 			return true;
 		}
 		//Putting the spawn area ensures that you don't try to check elements of myScript before there are any elements in the list.
 		else if (myScript[myScript.length - 1].piece.y = coord) {
 			//This means it's the last block in the script. You can drag it. 
-			console.log("Last block in the script");
 			return true;
 		}
 		else {
 			//It must be behind another block. Do not drag it.
-			console.log("GO AWAY DO NOT DRAGGY ME");
 			return false;
 		}
 	}
 }
 
+//Handles what happens if you win. 
 var winCase = function() {
-	console.log("Entered winCase function")
+	console.log("Entered winCase function");
+	//Makes canvas hidden. 
+	document.getElementById("demoCanvas").style.visibility = "hidden";
+	//Makes simulated image visible. 
+	// document.getElementById("simImage").style.visibility = "visible";
+	//Makes credits button visible. 
+	// document.getElementById("credButton").style.visibility = "visible";
+	//Makes reload page button visible?
+	//Animates girl and monster? 
+	//Displays congratulatory helptext?
+	document.getElementById("initHelpText").innerHTML = "Great work! Putting \"attack\" in a \"repeat\" <br> block successfully made Kristie attack <br> the monster over and over again. <br> <br> Thanks for playing! <br> <br> <a href = 'outro.html'>Credits</a>"
 }
