@@ -338,9 +338,7 @@ var winCase = function() {
 	//Makes canvas hidden. 
 	document.getElementById("demoCanvas").style.visibility = "hidden";
 	//Makes simulated image visible. 
-	// document.getElementById("simImage").style.visibility = "visible";
-	//Makes credits button visible. 
-	// document.getElementById("credButton").style.visibility = "visible";
+	document.getElementById("winHider").style.visibility = "visible";
 	//Makes reload page button visible?
 	//Animates girl and monster? 
 	//Displays congratulatory helptext?

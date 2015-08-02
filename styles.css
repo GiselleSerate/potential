@@ -107,4 +107,13 @@ p {
 	font-size: 16px;
 	/*WHEN YOU IMPORT THE BACKGROUND, PLEASE MAKE THIS WHITE*/
 	color: black;
+	z-index: 2;
+}
+
+#winHider {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	visibility: hidden;
+	z-index: 1;
 }
