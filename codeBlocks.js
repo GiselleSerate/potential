@@ -55,30 +55,30 @@ function init() {
 	stage.update();
 
 	var repeatSite = new createjs.Shape();
-	repeatSite.graphics.beginFill("#B2F0FF").drawRect(0,0,200,40);
+	repeatSite.graphics.beginFill("#8F56DA").drawRect(0,0,200,40);
 	repeatSite.x = leftSide;
 	repeatSite.y = topSpawn;
 	stage.addChild(repeatSite);
 	stage.update();
 
 	var attackSite = new createjs.Shape();
-	attackSite.graphics.beginFill("#C2F0C2").drawRect(0,0,200,40);
+	attackSite.graphics.beginFill("#398E72").drawRect(0,0,200,40);
 	attackSite.x = leftSide + 240;
 	attackSite.y = topSpawn;
 	stage.addChild(attackSite);
 	stage.update();
 
 	var createRepeatBlock = function() {
-		var repeatSet = new createjs.Graphics().beginFill("#00CCFF").drawRect(0, 0, 200, 40);
+		var repeatSet = new createjs.Graphics().beginFill("#552299").drawRect(0, 0, 200, 40);
 		var newRep = new createjs.Shape(repeatSet)
 		newRep.x = 0;
 		newRep.y = 0;
-		repeatSet = new createjs.Graphics().beginFill("#00CCFF").drawRect(0, 0, 20, 40);
+		repeatSet = new createjs.Graphics().beginFill("#552299").drawRect(0, 0, 20, 40);
 		var newExt = new createjs.Shape(repeatSet)
 		newExt.x = 0;
 		newExt.y = 40;
 		//Creates label.
-		var label = new createjs.Text("repeat", "#000000");
+		var label = new createjs.Text("repeat", "bold 14px 'Press Start 2P'", "#FFFFFF");
 		label.textAlign = "center";
 		label.x = 100;
 		label.y = 10;
@@ -96,12 +96,12 @@ function init() {
 	createRepeatBlock();
 
 	var createAttackBlock = function() {
-		var attackSet = new createjs.Graphics().beginFill("#00CC00").drawRect(0, 0, 200, 40);
+		var attackSet = new createjs.Graphics().beginFill("#225544").drawRect(0, 0, 200, 40);
 		var newAtt = new createjs.Shape(attackSet);		
 		newAtt.x = 0;
 		newAtt.y = 0;
 		//Creates label.
-		var label = new createjs.Text("attack", "#000000");
+		var label = new createjs.Text("attack", "bold 14px 'Press Start 2P'", "#FFFFFF");
 		label.textAlign = "center";
 		label.x = 100;
 		label.y = 10;
