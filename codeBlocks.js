@@ -336,11 +336,11 @@ function init() {
 var winCase = function() {
 	console.log("Entered winCase function");
 	//Makes canvas hidden. 
-	// document.getElementById("demoCanvas").style.visibility = "hidden";
+	document.getElementById("demoCanvas").style.visibility = "hidden";
 	//Makes simulated image visible. 
-	// document.getElementById("winHider").style.visibility = "visible";
+	document.getElementById("winHider").style.visibility = "visible";
 	//Makes reload page button visible?
 	//Animates girl and monster? 
 	//Displays congratulatory helptext?
-	// document.getElementById("initHelpText").innerHTML = "Great work! Putting \"attack\" in a \"repeat\" <br> block successfully made Kristie attack <br> the monster over and over again. <br> <br> Thanks for playing! <br> <br> <a href = 'outro.html'>Credits</a>"
+	document.getElementById("initHelpText").innerHTML = "Great work! Putting \"attack\" in a \"repeat\" <br> block successfully made Kristie attack <br> the monster over and over again. <br> <br> Thanks for playing! <br> <br> <a href = 'outro.html'>Credits</a>"
 }
