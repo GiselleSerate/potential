@@ -105,9 +105,7 @@ p {
 	position: absolute;
 	padding: 0px;
 	font-size: 16px;
-	/*WHEN YOU IMPORT THE BACKGROUND, PLEASE MAKE THIS WHITE*/
-	color: black;
-	z-index: 2;
+	z-index: 3;
 }
 
 #winHider {
@@ -115,5 +113,19 @@ p {
 	left: 0px;
 	top: 0px;
 	visibility: hidden;
+	z-index: 2;
+}
+
+#theBG {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	z-index: 0;
+}
+
+#demoCanvas{
+	position: absolute;
+	left: 0px;
+	top: 20px;
 	z-index: 1;
 }
