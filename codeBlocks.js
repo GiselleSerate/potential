@@ -197,6 +197,7 @@ function init() {
 	var whatKind;
 	var instance;
 	var blockY;
+	var condition;
 
 	for(var i=0;i< codeList.length; i++) {
 
@@ -208,7 +209,7 @@ function init() {
 		whatKind = codeList[i].kind;
 		instance = codeList[i];
 		blockY = codeList[i].piece.y;
-		console.log("HI IT'S BLOCKY MY VALUE IS " + blockY);
+		console.log("HI IT'S BLOCKY MY VALUE IS " + blockY + " whatKind is " + whatKind);
 		
 		//What to do if the block type is repeat.
 		if (whatKind === "repeat") {
@@ -216,7 +217,16 @@ function init() {
 
 			//The following (including pleaseMove and some conditions) is called when mouse is clicked.
 			codeList[i].piece.on("pressmove", function(evt) {
-				if (isUnlocked(0)) {
+				//I should only be checking this once, on the first step of the drag. 
+				if (whichTime === 0) {
+					//If it's the first time, check isUnlocked. 
+					condition = (isUnlocked(0));
+				}
+				else {
+					//Assume that it will keep dropping and resetting if it runs into errors.
+					condition = true;
+				}
+				if (condition) {
 					console.log("This component is unlocked. Go ahead.");
 					//Save position of thing if it's the first time through
 					if (whichTime === 0) {
@@ -234,6 +244,7 @@ function init() {
 			codeList[i].piece.on("pressup", function(evt) { 	
 				pleaseDrop(instance, evt, "repeat");
 				whichTime = 0;
+				// lockStatus = 0;
 			});
 		}
 
@@ -241,7 +252,16 @@ function init() {
 		else if (whatKind === "attack") {
 			console.log("in for loop with attack");
 			codeList[i].piece.on("pressmove", function(evt) {
-				if (isUnlocked(1)) {
+				//I should only be checking this once, on the first step of the drag. 
+				if (whichTime === 0) {
+					//If it's the first time, check isUnlocked. 
+					condition = (isUnlocked(1));
+				}
+				else {
+					//Assume that it will keep dropping and resetting if it runs into errors.
+					condition = true;
+				}
+				if (condition) {
 					//Save position of thing if it's the first time through
 					if (whichTime === 0) {
 						getOriginal(instance);
