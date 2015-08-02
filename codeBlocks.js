@@ -185,6 +185,7 @@ function init() {
 					console.log("Second is attack");
 					//alert("You won!");
 					console.log("WIN CASE REACHED");
+					winCase();
 				}
 			}
 		}
@@ -203,15 +204,19 @@ function init() {
 		if (pointList.length > 2) {
 			pointList.pop;
 		}
-		//Calls pleaseMove function when mouse is clicked.
+
 		whatKind = codeList[i].kind;
 		instance = codeList[i];
 		blockY = codeList[i].piece.y;
 		console.log("HI IT'S BLOCKY MY VALUE IS " + blockY);
+		
+		//What to do if the block type is repeat.
 		if (whatKind === "repeat") {
 			console.log("in for loop with repeat");
+
+			//The following (including pleaseMove and some conditions) is called when mouse is clicked.
 			codeList[i].piece.on("pressmove", function(evt) {
-				if (isUnlocked(i)) {
+				if (isUnlocked(0)) {
 					console.log("This component is unlocked. Go ahead.");
 					//Save position of thing if it's the first time through
 					if (whichTime === 0) {
@@ -224,16 +229,19 @@ function init() {
 					console.log("Component locked. Go away.");
 				}
 			});
+
 		    //Calls pleaseDrop function when mouse is no longer clicked.
 			codeList[i].piece.on("pressup", function(evt) { 	
 				pleaseDrop(instance, evt, "repeat");
 				whichTime = 0;
 			});
 		}
+
+		//What to do if the block type is attack.
 		else if (whatKind === "attack") {
 			console.log("in for loop with attack");
 			codeList[i].piece.on("pressmove", function(evt) {
-				if (isUnlocked(blockY)) {
+				if (isUnlocked(1)) {
 					//Save position of thing if it's the first time through
 					if (whichTime === 0) {
 						getOriginal(instance);
@@ -328,11 +336,14 @@ function init() {
 	};
 
 	var isUnlocked = function(index) {
+		//In which many things are console.logged.
 		console.log(index);
 		console.log(codeList);
-		var coord = codeList[index].piece.y
+
+		var coord = codeList[index].piece.y;
 		console.log("y is " + coord);
-		if (coord < 40) {
+		console.log(myScript.length);
+		if (coord <= 40 || myScript.length === 0) {
 			//This means it's in the spawn area. You can drag it.
 			console.log("In spawn area");
 			console.log(coord);
@@ -350,4 +361,8 @@ function init() {
 			return false;
 		}
 	}
+}
+
+var winCase = function() {
+	console.log("Entered winCase function")
 }
