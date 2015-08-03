@@ -1,25 +1,3 @@
-<!--Example code for a sprite animation-->
-
-
-<!DOCTYPE html>
-<html lang="">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
-
-<!--    Import easel js -->
-    <script src="https://code.createjs.com/easeljs-0.8.1.min.js"></script>
-
-</head>
-
-<body onload="initintroscene1();">
-<!--    canvas element: necessary for easel js -->
-    <canvas id="canvasintroscene1" width="1355" height="633"><p style="z-index:10;"> Kristie: Can I take a computer science class, Dad? <br> <br> Dad: No! Computer science is for boys! <br> <br> <br> <br> <br> <br> <br> <br> Use your right arrow key to advance to the next page! </p></canvas>
-
-<!--javascript -->
-    <script>
 
         //create variables you need
         var stage, instance2;
@@ -27,7 +5,7 @@
         function init() {
 
             //initialize stage variable to your html canvas element
-            stage = new createjs.Stage("canvasintroscene1");
+            stage = new createjs.Stage("demoCanvas");
 
             //data object that holds animation info-spritesheet and how to break it up
             var data = {
@@ -89,16 +67,3 @@
             }
             stage.update(event); // important!!
         }
-
-    </script>
-    <style type="text/css">
-        body{
-            background-image: url("introscene1.jpg");
-            background-size: cover;
-
-        }
-    </style>
-
-</body>
-
-</html>

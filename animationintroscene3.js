@@ -1,25 +1,3 @@
-<!--Example code for a sprite animation-->
-
-
-<!DOCTYPE html>
-<html lang="">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
-
-<!--    Import easel js -->
-    <script src="https://code.createjs.com/easeljs-0.8.1.min.js"></script>
-
-</head>
-
-<body onload="initintroscene1();">
-<!--    canvas element: necessary for easel js -->
-    <canvas id="canvasintroscene1" width="1355" height="633"><p style="z-index:10;"> Kristie: Can I take a computer science class, Dad? <br> <br> Dad: No! Computer science is for boys! <br> <br> <br> <br> <br> <br> <br> <br> Use your right arrow key to advance to the next page! </p></canvas>
-
-<!--javascript -->
-    <script>
 
         //create variables you need
         var stage, instance2;
@@ -27,23 +5,23 @@
         function init() {
 
             //initialize stage variable to your html canvas element
-            stage = new createjs.Stage("canvasintroscene1");
+            stage = new createjs.Stage("demoCanvas");
 
             //data object that holds animation info-spritesheet and how to break it up
             var data = {
-                images: ["dadsheetintroscene1.png"],
+                images: ["fairyintroscene3.png"],
                 //this says each individual sprite is 180 wide and 247.5 tall (view image size in photoshop and do the math to get these numbers)
-                frames: {width:200, height:422, count:3},
+                frames: {width:50, height:55, count:2},
                 //define animations here by giving frame indexes (remember to start at zero)
                 animations: {
-                    stand:0,
-                    run:[0,2]
+                    stop:0,
+                    fly:[0,2]
                 }
             };
             var data2 = {
-                images: ["girlsheetintroscene1.png"],
+                images: ["girlsheetlvl1.png"],
                 //this says each individual sprite is 180 wide and 247.5 tall (view image size in photoshop and do the math to get these numbers)
-                frames: {width:160, height:286, count:3},
+                frames: {width:72, height:128, count:3},
                 //define animations here by giving frame indexes (remember to start at zero)
                 animations: {
                     stand:0,
@@ -60,45 +38,24 @@
             instance2 = new createjs.Sprite(ss2);
 
             //give your animation starting coordinates: (0,0) is top left
-            instance.x = 550;
-            instance.y = 175;
+            instance.x = 300;
+            instance.y = 280;
             //instance2.x = 0;
-            instance2.y = 325;
+            instance2.y = 450;
 
             //need to add instance to stage (everything needs to be added to the stage)
             stage.addChild(instance);
-            stage.addChild(instance2);
+            //stage.addChild(instance2);
             //this starts the animation and repeats forever
             //gotoAndStop would cause it to run once
             //can also specify a animation to follow, look at docs
-            instance.gotoAndPlay("stand");
+            instance.gotoAndPlay("run");
             instance2.gotoAndPlay("run");
 
 
             //these two lines continully update the stage
-            createjs.Ticker.setFPS(10);
-            createjs.Ticker.addEventListener("tick", tick);
+            createjs.Ticker.setFPS(6);
+            createjs.Ticker.addEventListener("tick", stage);
 
 
         }
-        function tick(event) {
-            instance2.x = instance2.x + 10;
-            if (instance2.x > 250) { 
-                instance2.gotoAndPlay("stand"); 
-                return false;
-            }
-            stage.update(event); // important!!
-        }
-
-    </script>
-    <style type="text/css">
-        body{
-            background-image: url("introscene1.jpg");
-            background-size: cover;
-
-        }
-    </style>
-
-</body>
-
-</html>
