@@ -31,9 +31,9 @@
 
             //data object that holds animation info-spritesheet and how to break it up
             var data = {
-                images: ["monstersheetlvl1.png"],
+                images: ["dadsheetintroscene1.png"],
                 //this says each individual sprite is 180 wide and 247.5 tall (view image size in photoshop and do the math to get these numbers)
-                frames: {width:80, height:177, count:3},
+                frames: {width:200, height:422, count:3},
                 //define animations here by giving frame indexes (remember to start at zero)
                 animations: {
                     stand:0,
@@ -41,9 +41,9 @@
                 }
             };
             var data2 = {
-                images: ["girlsheetlvl1.png"],
+                images: ["girlsheetintroscene1.png"],
                 //this says each individual sprite is 180 wide and 247.5 tall (view image size in photoshop and do the math to get these numbers)
-                frames: {width:72, height:128, count:3},
+                frames: {width:160, height:286, count:3},
                 //define animations here by giving frame indexes (remember to start at zero)
                 animations: {
                     stand:0,
@@ -61,9 +61,9 @@
 
             //give your animation starting coordinates: (0,0) is top left
             instance.x = 550;
-            instance.y = 400;
+            instance.y = 175;
             //instance2.x = 0;
-            instance2.y = 450;
+            instance2.y = 325;
 
             //need to add instance to stage (everything needs to be added to the stage)
             stage.addChild(instance);
@@ -71,7 +71,7 @@
             //this starts the animation and repeats forever
             //gotoAndStop would cause it to run once
             //can also specify a animation to follow, look at docs
-            instance.gotoAndPlay("run");
+            instance.gotoAndPlay("stand");
             instance2.gotoAndPlay("run");
 
 
@@ -93,7 +93,7 @@
     </script>
     <style type="text/css">
         body{
-            background-image: url("gamebglvl1.jpg");
+            background-image: url("introscene1.jpg");
             background-size: cover;
 
         }
