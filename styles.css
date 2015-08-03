@@ -131,7 +131,18 @@ p {
 	z-index: 0;
 }
 
-#demoCanvas{
+#demoCanvas1{
+	position: absolute;
+	left: 0px;
+	top: 20px;
+}
+#demoCanvas2{
+	position: absolute;
+	left: 0px;
+	top: 20px;
+	z-index: 1;
+}
+#demoCanvas3{
 	position: absolute;
 	left: 0px;
 	top: 20px;
