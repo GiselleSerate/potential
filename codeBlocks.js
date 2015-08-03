@@ -347,7 +347,7 @@ var winCase = function() {
 	//Makes reload page button visible?
 	//Animates girl and monster? 
 	//Displays congratulatory helptext?
-	document.getElementById("initHelpText").innerHTML = "Great work! Putting \"attack\" in a \"repeat\" <br> block successfully made Kristie attack <br> the monster over and over again. <br> <br> Thanks for playing! <br> <br> <a href = 'outro.html'>Credits</a>"
+	document.getElementById("initHelpText").innerHTML = "Great work! Putting \"attack\" in a \"repeat\" <br> block successfully made Kristie attack <br> the monster again and again. <br> <br> Thanks for playing! <br> <br> <a href = 'outro.html'>Credits</a>"
 }
 
 //Handles what happens if you lose. 
@@ -360,5 +360,5 @@ var loseCase = function() {
 	//Makes reload page button visible?
 	//Animates girl and monster? 
 	//Displays congratulatory helptext?
-	document.getElementById("initHelpText").innerHTML = "Not quite. What are you repeating? <br> <br> Remember, the repeat block will repeat <br> anything inside it. <br> <br> <a href = 'level1.html'>Try again?</a>"
+	document.getElementById("initHelpText").innerHTML = "Not quite. <br> <br> Remember, the repeat block will repeat <br> anything inside it. <br> <br> <a href = 'level1.html'>Try again?</a>"
 }
