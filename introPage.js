@@ -215,7 +215,7 @@
                 instance23.gotoAndPlay("stand"); 
                 return false;
             }
-            stage.update(event); // important!!
+            stage3.update(event); // important!!
         }
 
 
