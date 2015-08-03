@@ -165,8 +165,9 @@ function init() {
 		}
 		//Otherwise, if the last point in pointList is not full, do not make a new slot.
 
-		//Checking win case.
+
 		if (myScript.length > 1) {
+			//Checking win case.
 			if (myScript[0].kind === "repeat") {
 				console.log("First is a repeat");
 				if (myScript[1].kind === "attack") {
@@ -174,6 +175,10 @@ function init() {
 					console.log("WIN CASE REACHED");
 					winCase();
 				}
+			}
+			//Checking lose case.
+			else {
+				loseCase();
 			}
 		}
 	};
@@ -343,4 +348,17 @@ var winCase = function() {
 	//Animates girl and monster? 
 	//Displays congratulatory helptext?
 	document.getElementById("initHelpText").innerHTML = "Great work! Putting \"attack\" in a \"repeat\" <br> block successfully made Kristie attack <br> the monster over and over again. <br> <br> Thanks for playing! <br> <br> <a href = 'outro.html'>Credits</a>"
+}
+
+//Handles what happens if you lose. 
+var loseCase = function() {
+	console.log("Entered loseCase function");
+	//Makes canvas hidden. 
+	document.getElementById("demoCanvas").style.visibility = "hidden";
+	//Makes simulated image visible. 
+	document.getElementById("loseHider").style.visibility = "visible";
+	//Makes reload page button visible?
+	//Animates girl and monster? 
+	//Displays congratulatory helptext?
+	document.getElementById("initHelpText").innerHTML = "Not quite. What are you repeating? <br> <br> Remember, the repeat block will repeat <br> anything inside it. <br> <br> <a href = 'level1.html'>Try again?</a>"
 }

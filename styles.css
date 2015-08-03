@@ -116,6 +116,14 @@ p {
 	z-index: 2;
 }
 
+#loseHider {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	visibility: hidden;
+	z-index: 2;
+}
+
 #theBG {
 	position: absolute;
 	left: 0px;
