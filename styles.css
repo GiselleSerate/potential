@@ -41,12 +41,16 @@ body {
 
 #cutscene2 {
 	position: absolute;
+	top: 0px;
+	left: 0px;
 	width:100%;
 	height:100%;
 }
 
 #cutscene3 {
 	position: absolute;
+	top: 0px;
+	left: 0px;
 	width:100%;
 	height:100%;
 }
@@ -169,11 +173,11 @@ a:active {
 	position: absolute;
 	left: 0px;
 	top: 20px;
-	z-index: 1;
+	/*z-index: 1;*/
 }
 #demoCanvas3{
 	position: absolute;
 	left: 0px;
 	top: 20px;
-	z-index: 1;
+	/*z-index: 1;*/
 }
