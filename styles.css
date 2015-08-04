@@ -124,7 +124,7 @@ p {
 	position: absolute;
 	padding: 0px;
 	font-size: 16px;
-	z-index: 3;
+	z-index: 6;
 }
 
 #winHider {
@@ -192,6 +192,12 @@ a:active {
 	/*z-index: 1;*/
 }
 #demoCanvas3{
+	position: absolute;
+	left: 0px;
+	top: 20px;
+	z-index: 4;
+}
+#attackCanvas {
 	position: absolute;
 	left: 0px;
 	top: 20px;
