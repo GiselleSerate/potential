@@ -72,21 +72,21 @@
             //this starts the animation and repeats forever
             //gotoAndStop would cause it to run once
             //can also specify a animation to follow, look at docs
-            instance.gotoAndPlay("run");
+            //instance.gotoAndPlay("run");
             instance2.gotoAndPlay("run");
 
 
         }
         function move(){
-            instance2.x = instance2.x + 10;
+            instance2.x = 250;
         }
         function tick(event) {
-            if (instance2.x <= 250){
+            if (instance2.x < 250){
                 move();
             }
-            else if (instance2.x > 250) { 
+            else if (instance2.x >= 250) { 
                 fight();
-                instance.gotoAndPlay("stand"); 
+                //instance.gotoAndPlay("stand"); 
                 console.log("i reach this!");
                 //return false;
             }
