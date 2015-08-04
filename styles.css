@@ -50,6 +50,11 @@ body {
 	width:100%;
 	height:100%;
 }
+#cutscene4 {
+	position: absolute;
+	width:100%;
+	height:100%;
+}
 
 #textBox1 {
 	background-color: rgba(0, 0, 0, 0.6);
@@ -77,12 +82,20 @@ body {
     width: 90%;
     height: 30%;
 }
+#textBox4 {
+	background-color: rgba(0, 0, 0, 0.6);
+    position: absolute;
+    left: 70px;
+    top: 435px;
+    width: 90%;
+    height: 30%;
+}
 
 p {
 	padding: 0px 15px;
 }
 
-#secondPage, #thirdPage, #fourthPage {
+#secondPage, #thirdPage, #fourthPage, #fifthPage {
 	visibility: hidden;
 }
 

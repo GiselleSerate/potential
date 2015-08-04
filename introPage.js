@@ -20,6 +20,10 @@ var nextPage = function(){
 		document.getElementById("thirdPage").style.visibility = "hidden";
 		document.getElementById("fourthPage").style.visibility = "visible";
 	}
+	if (counter == 5) {
+		document.getElementById("fourthPage").style.visibility = "hidden";
+		document.getElementById("fifthPage").style.visibility = "visible";
+	}
 }
 
 $(document).keydown(function(e) {
