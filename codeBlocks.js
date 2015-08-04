@@ -413,9 +413,10 @@ var girlAttacks = function() {
 	
 	//create variables you need
 	var stage, instance, instance2;
+	
 
-	//initialize stage variable to your html canvas element
-    stage = new createjs.Stage("demoCanvas");
+    //initialize stage variable to your html canvas element
+    stage = new createjs.Stage("attackCanvas");
 
     //data object that holds animation info-spritesheet and how to break it up
     var data = {
@@ -460,30 +461,29 @@ var girlAttacks = function() {
     //this starts the animation and repeats forever
     //gotoAndStop would cause it to run once
     //can also specify a animation to follow, look at docs
-    instance.gotoAndPlay("run");
+    //instance.gotoAndPlay("run");
     instance2.gotoAndPlay("run");
 
-    //init ended here in animationlvl1.js
-
     function move(){
-		instance2.x = instance2.x + 10;
-	}
-	function tick(event) {
-	    if (instance2.x <= 250){
-	        move();
-	    }
-	    else if (instance2.x > 250) { 
-	        fight();
-	        instance.gotoAndPlay("stand"); 
-	        console.log("i reach this!");
-	        //return false;
-	    }
-	    stage.update(event); // important!!
-	}
-	function fight(){
-	    instance2.gotoAndPlay("fight");
-	    stage.update(event);
-	}
+        instance2.x = 250;
+    }
+    function tick(event) {
+        if (instance2.x < 250){
+            move();
+        }
+        else if (instance2.x >= 250) { 
+            fight();
+            //instance.gotoAndPlay("stand"); 
+            console.log("i reach this!");
+            //return false;
+        }
+        stage.update(event); // important!!
+    }
+    function fight(){
+        instance2.gotoAndPlay("fight");
+        stage.update(event);
+    }
+
 
     //these two lines continully update the stage
     createjs.Ticker.setFPS(6);
