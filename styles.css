@@ -131,11 +131,34 @@ p {
 	z-index: 0;
 }
 
-#demoCanvas{
+#demoCanvas {
 	position: absolute;
 	left: 0px;
 	top: 20px;
 }
+
+a:link {
+	color: #398E72;
+}
+
+a:visited {
+	color: #8F56DA;
+}
+
+a:hover {
+	color: "#398E72";
+}
+
+a:focus {
+	color: "#398E72";
+}
+
+a:active {
+	color: "#FF0000";
+}
+
+*/
+/*------------Jeanelle's CSS Below This Line------------*/
 
 #demoCanvas1{
 	position: absolute;
