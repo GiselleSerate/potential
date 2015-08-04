@@ -154,6 +154,7 @@ p {
 	position: absolute;
 	left: 0px;
 	top: 20px;
+	z-index: 5;
 }
 
 a:link {
