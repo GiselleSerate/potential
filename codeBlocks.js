@@ -303,21 +303,21 @@ function init() {
 		}
 	};
 
-	var getOriginal = function(object) {
-		var objY = object.piece.y;
-		//Go through point list.
-		for (i = 0; i < pointList.length; i++) {
-			var storedY = pointList[i].y + 40;
-			var itsABool = (String(objY) === String(storedY));
-			//Check if the object is at that point.
-			if (itsABool) {
-				origPos = i;
-				//Says this point no longer has a block because you just dragged it out.
-				pointList[i].hasBlock = 0;
-				myScript.pop;
-			}
-		}
-	};
+	// var getOriginal = function(object) {
+	// 	var objY = object.piece.y;
+	// 	//Go through point list.
+	// 	for (i = 0; i < pointList.length; i++) {
+	// 		var storedY = pointList[i].y + 40;
+	// 		var itsABool = (String(objY) === String(storedY));
+	// 		//Check if the object is at that point.
+	// 		if (itsABool) {
+	// 			origPos = i;
+	// 			//Says this point no longer has a block because you just dragged it out.
+	// 			pointList[i].hasBlock = 0;
+	// 			myScript.pop;
+	// 		}
+	// 	}
+	// };
 
 	var isUnlocked = function(index) {
 		var coord = codeList[index].piece.y;
@@ -408,12 +408,15 @@ function init() {
 
 var girlAttacks = function() {
 	console.log("Girl attacks monster.")
+	//Hides demoCanvas3, which contains the girl walking.
+	document.getElementById("demoCanvas3").style.visibility = "hidden";
+	//We can either do this or change the image source? But she is stopped, so this way might be easier.
 }
 
 //Handles what happens if you win. 
 var winCase = function() {
 	console.log("Entered winCase function");
-	//Makes canvas hidden. 
+	//Makes draggy canvas hidden. 
 	document.getElementById("demoCanvas").style.visibility = "hidden";
 	//Makes simulated image visible. 
 	document.getElementById("winHider").style.visibility = "visible";
