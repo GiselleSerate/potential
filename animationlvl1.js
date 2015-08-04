@@ -1,15 +1,14 @@
-
-        //create variables you need
-        var stage, instance2;
+ //create variables you need
+        var stage, instance, instance2;
 
         function init() {
 
             //initialize stage variable to your html canvas element
-            stage = new createjs.Stage("demoCanvas3");
+            stage = new createjs.Stage("demoCanvas");
 
             //data object that holds animation info-spritesheet and how to break it up
             var data = {
-                images: ["monstersheetlvl1.png"],
+                images: ["monstersheetback.png"],
                 //this says each individual sprite is 180 wide and 247.5 tall (view image size in photoshop and do the math to get these numbers)
                 frames: {width:80, height:177, count:3},
                 //define animations here by giving frame indexes (remember to start at zero)
@@ -19,12 +18,13 @@
                 }
             };
             var data2 = {
-                images: ["girlsheetlvl1.png"],
+                images: ["girlsheetlvl1fight.png"],
                 //this says each individual sprite is 180 wide and 247.5 tall (view image size in photoshop and do the math to get these numbers)
-                frames: {width:72, height:128, count:3},
+                frames: {width:72, height:128, count:4},
                 //define animations here by giving frame indexes (remember to start at zero)
                 animations: {
                     stand:0,
+                    fight:3,
                     run:[0,2]
                 }
             };
@@ -34,7 +34,7 @@
             var ss = new createjs.SpriteSheet(data);
             var ss2 = new createjs.SpriteSheet(data2);
             //create animation from the sprite sheet
-            var instance = new createjs.Sprite(ss);
+            instance = new createjs.Sprite(ss);
             instance2 = new createjs.Sprite(ss2);
 
             //give your animation starting coordinates: (0,0) is top left
@@ -53,17 +53,29 @@
             instance2.gotoAndPlay("run");
 
 
+        }
+        function move(){
+            instance2.x = instance2.x + 10;
+        }
+        function tick(event) {
+            if (instance2.x <= 250){
+                move();
+            }
+            else if (instance2.x > 250) { 
+                fight();
+                instance.gotoAndPlay("stand"); 
+                console.log("i reach this!");
+                //return false;
+            }
+            stage.update(event); // important!!
+        }
+        function fight(){
+            instance2.gotoAndPlay("fight");
+            stage.update(event);
+        }
+
+
             //these two lines continully update the stage
             createjs.Ticker.setFPS(6);
             createjs.Ticker.addEventListener("tick", tick);
 
-
-        }
-        function tick(event) {
-            instance2.x = instance2.x + 10;
-            if (instance2.x > 250) { 
-                instance2.gotoAndPlay("stand"); 
-                return false;
-            }
-            stage.update(event); // important!!
-        }
