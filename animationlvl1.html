@@ -72,7 +72,7 @@
             //gotoAndStop would cause it to run once
             //can also specify a animation to follow, look at docs
             instance.gotoAndPlay("run");
-            instance2.gotoAndPlay("run");
+            instance2.gotoAndPlay("fight");
 
 
             //these two lines continully update the stage
@@ -85,11 +85,14 @@
             instance2.x = instance2.x + 10;
             if (instance2.x > 250) { 
                 instance2.gotoAndPlay("stand"); 
+                //fight doesnt show up
+                //instance2.gotoAndPlay("fight");
                 return false;
             }
+            //fight shows up and slides
+            //instance2.gotoAndPlay("fight");
             stage.update(event); // important!!
         }
-
     </script>
     <style type="text/css">
         body{
