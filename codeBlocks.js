@@ -432,7 +432,7 @@ var girlAttacks = function() {
     var data2 = {
         images: ["girlsheetlvl1fight.png"],
         //this says each individual sprite is 180 wide and 247.5 tall (view image size in photoshop and do the math to get these numbers)
-        frames: {width:72, height:128, count:4},
+        frames: {width:200, height:128, count:4},
         //define animations here by giving frame indexes (remember to start at zero)
         animations: {
             stand:0,
